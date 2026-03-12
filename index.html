@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en" style="color-scheme: dark;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>FinanceLab — All-in-One Finance Calculator</title>
+<meta name="description" content="10 powerful financial calculators in one privacy-first app. Mortgage, investment growth, salary converter, retirement planner, debt snowball & more. No tracking, no sign-up.">
+<meta name="author" content="Chris">
+<meta name="theme-color" content="#0a0a0f">
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="FinanceLab — All-in-One Finance Calculator">
+<meta property="og:description" content="10 powerful financial calculators in one privacy-first app. Mortgage, investments, salary, retirement, debt snowball & more.">
+<meta property="og:image" content="/logo.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="1024">
+<meta property="og:url" content="https://financelab.vercel.app">
+<meta property="og:site_name" content="FinanceLab">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FinanceLab — All-in-One Finance Calculator">
+<meta name="twitter:description" content="10 powerful financial calculators. Mortgage, investments, salary, retirement, debt snowball & more. Zero tracking.">
+<meta name="twitter:image" content="/logo.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #1a1a24;
+  --border: rgba(255,255,255,0.07);
+  --border-focus: rgba(200,245,90,0.5);
+  --text: #efefea;
+  --muted: #666672;
+  --muted2: #999aa8;
+  --lime: #c8f55a;
+  --lime-dim: rgba(200,245,90,0.1);
+  --red: #ff5f5f;
+  --red-dim: rgba(255,95,95,0.1);
+  --teal: #5af0c8;
+  --teal-dim: rgba(90,240,200,0.1);
+  --gold: #f5c050;
+  --gold-dim: rgba(245,192,80,0.1);
+  --purple: #a87fff;
+}
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ── NAV ── */
+nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--lime);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+.brand-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: var(--lime);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Desktop: single scrollable row */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 13px 15px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted2);
+  cursor: pointer;
+  white-space: nowrap;
+  border: none;
+  background: none;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  font-family: 'DM Sans', sans-serif;
+  flex-shrink: 0;
+}
+.tab:hover { color: #ffffff; }
+.tab.on { color: var(--lime); border-bottom-color: var(--lime); }
+
+/* ── MOBILE NAV (≤600px): horizontal scrollable pill strip ── */
+@media (max-width: 600px) {
+  .nav-top { padding: 0 12px; }
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    border-top: 1px solid var(--border);
+  }
+  .tabs .tab {
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    border: 1.5px solid var(--border) !important;
+    border-radius: 99px !important;
+    background: transparent !important;
+    color: var(--muted2) !important;
+    white-space: nowrap;
+    border-bottom: 1.5px solid var(--border) !important;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    transition: all .15s;
+  }
+  .tabs .tab.on {
+    color: #0a0a0f !important;
+    border-color: var(--lime) !important;
+    background: var(--lime) !important;
+  }
+}
+
+/* ── LAYOUT ── */
+.page { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+.panel { display: none; padding: 40px 0 80px; }
+.panel.on { display: block; animation: fadeUp .3s ease-out; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .page { padding: 0 14px; }
+  .panel { padding: 24px 0 60px; }
+}
+
+/* ── HEADER ── */
+.hdr { margin-bottom: 32px; }
+.hdr h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.hdr p { color: var(--muted2); font-size: 14px; }
+@media (max-width: 600px) {
+  .hdr { margin-bottom: 20px; }
+  .hdr h2 { font-size: 24px; }
+}
+
+/* ── INPUTS ── */
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+@media (max-width: 540px) { .fields { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+}
+.field input, .field select {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  padding: 11px 14px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color .15s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+.field input:focus, .field select:focus { border-color: var(--border-focus); }
+.field .hint { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+/* ── HERO RESULT ── */
+.hero {
+  background: linear-gradient(135deg, rgba(200,245,90,0.06) 0%, rgba(200,245,90,0.02) 100%);
+  border: 1px solid rgba(200,245,90,0.15);
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  margin-bottom: 16px;
+}
+.hero-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted2);
+  margin-bottom: 8px;
+}
+.hero-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 46px;
+  font-weight: 800;
+  color: var(--lime);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.hero-note { font-size: 13px; color: var(--muted2); margin-top: 8px; }
+
+@media (max-width: 600px) {
+  .hero { padding: 20px 18px 16px; border-radius: 12px; }
+  .hero-val { font-size: 34px; }
+}
+
+/* ── STAT ROW ── */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.stat-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.stat-val { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 700; }
+.lime  { color: var(--lime); }
+.red   { color: var(--red); }
+.teal  { color: var(--teal); }
+.gold  { color: var(--gold); }
+.pu    { color: var(--purple); }
+
+@media (max-width: 600px) {
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .stat { padding: 12px; border-radius: 10px; }
+  .stat-val { font-size: 16px; }
+}
+
+/* ── CHART ── */
+.chart-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .chart-wrap { padding: 14px; border-radius: 10px; }
+}
+.chart-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* ── TABLE ── */
+.tbl-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface2) transparent;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+}
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border: none; }
+.pos { color: var(--lime); } .neg { color: var(--red); }
+
+@media (max-width: 600px) {
+  table { font-size: 12px; }
+  th, td { padding: 8px 10px; }
+}
+
+/* ── BUDGET / DEBT ROWS ── */
+.row-item {
+  display: grid;
+  grid-template-columns: 1fr 130px 36px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+@media (max-width: 480px) {
+  .row-item { grid-template-columns: 1fr 100px 32px; gap: 6px; }
+}
+.row-item input {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  width: 100%;
+  transition: border-color .15s;
+}
+.row-item input:focus { border-color: var(--border-focus); }
+.btn-del {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+.btn-del:hover { border-color: var(--red); color: var(--red); }
+
+/* ── ADD ROW ── */
+.add-debt-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 90px 44px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+@media (max-width: 480px) { .add-debt-row { grid-template-columns: 1fr 1fr; } }
+.add-debt-row input {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  width: 100%;
+  transition: border-color .15s;
+}
+.add-debt-row input:focus { border-color: var(--border-focus); }
+.btn-add {
+  background: var(--lime);
+  color: #0a0a0f;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 0;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  height: 38px;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .15s;
+  flex-shrink: 0;
+}
+.btn-add:hover { opacity: .85; }
+.btn-add-full {
+  background: var(--lime);
+  color: #0a0a0f;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: opacity .15s;
+  margin-bottom: 20px;
+}
+.btn-add-full:hover { opacity: .85; }
+
+/* ── DEBT CARD ── */
+.debt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.debt-info { display: flex; flex-direction: column; gap: 2px; }
+.debt-name { font-weight: 600; font-size: 14px; }
+.debt-meta { font-size: 12px; color: var(--muted2); }
+.debt-bar { flex: 1; height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.debt-bar-fill { height: 100%; border-radius: 99px; transition: width .3s; }
+
+/* ── WARNING / INFO ── */
+.infobox {
+  background: rgba(245,192,80,0.06);
+  border: 1px solid rgba(245,192,80,0.2);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.infobox.success {
+  background: rgba(200,245,90,0.06);
+  border-color: rgba(200,245,90,0.2);
+  color: var(--lime);
+}
+
+/* ── MODE TOGGLE ── */
+.mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+  text-align: center;
+}
+.mode-btn.active {
+  border: 1.5px solid var(--lime);
+  background: var(--lime);
+  color: #0a0a0f;
+  font-weight: 700;
+}
+.mode-btn.inactive {
+  border: 1.5px solid var(--border);
+  background: none;
+  color: var(--muted2);
+}
+
+/* ── DUAL HERO ── */
+.dual-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (max-width: 480px) {
+  .dual-hero { grid-template-columns: 1fr; }
+}
+.hero-teal {
+  background: linear-gradient(135deg, rgba(90,240,200,0.06) 0%, rgba(90,240,200,0.02) 100%);
+  border-color: rgba(90,240,200,0.15);
+}
+
+/* chart defaults */
+.chart-wrap canvas { display: block; }
+
+/* ── FOOTER ── */
+.site-footer {
+  text-align: center;
+  padding: 24px 16px 32px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-top">
+    <div class="brand"><span class="brand-dot"></span> FinanceLab</div>
+  </div>
+  <div class="tabs">
+    <button class="tab on"  onclick="go(0)">Mortgage</button>
+    <button class="tab"     onclick="go(1)">Investment</button>
+    <button class="tab"     onclick="go(2)">Salary</button>
+    <button class="tab"     onclick="go(3)">Loan Payoff</button>
+    <button class="tab"     onclick="go(4)">Net Worth</button>
+    <button class="tab"     onclick="go(5)">Budget</button>
+    <button class="tab"     onclick="go(6)">Retirement</button>
+    <button class="tab"     onclick="go(7)">Savings Goal</button>
+    <button class="tab"     onclick="go(8)">Debt Snowball</button>
+    <button class="tab"     onclick="go(9)">Rent vs Buy</button>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ═══════════════════════════════════════════
+     1. MORTGAGE
+     M = P·r·(1+r)^n / ((1+r)^n − 1)
+═══════════════════════════════════════════ -->
+<div class="panel on" id="p0">
+  <div class="hdr">
+    <h2>Mortgage Calculator</h2>
+    <p>Estimate your monthly payment and total interest for any home loan.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Home Price</label>
+      <input type="number" id="m-price" value="400000" oninput="calcM()">
+    </div>
+    <div class="field">
+      <label>Down Payment</label>
+      <input type="number" id="m-down" value="80000" oninput="calcM()">
+      <span class="hint" id="m-pct">20% down</span>
+    </div>
+    <div class="field">
+      <label>Interest Rate (%)</label>
+      <input type="number" id="m-rate" value="6.5" step="0.1" oninput="calcM()">
+    </div>
+    <div class="field">
+      <label>Loan Term</label>
+      <select id="m-term" onchange="calcM()">
+        <option value="30">30 years</option>
+        <option value="20">20 years</option>
+        <option value="15">15 years</option>
+        <option value="10">10 years</option>
+      </select>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Monthly Payment (Principal + Interest)</div>
+    <div class="hero-val" id="m-pay">&mdash;</div>
+    <div class="hero-note" id="m-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Loan Amount</div><div class="stat-val" id="m-loan">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Total Interest</div><div class="stat-val red" id="m-tint">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Total Cost</div><div class="stat-val" id="m-tot">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Principal vs Interest Each Year</div><div style="height:200px"><canvas id="m-chart"></canvas></div></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Year</th><th>Principal</th><th>Interest</th><th>Balance</th></tr></thead>
+      <tbody id="m-rows"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     2. INVESTMENT GROWTH
+     FV = PV·(1+r/12)^(12t) + PMT·((1+r/12)^(12t)−1)/(r/12)
+═══════════════════════════════════════════ -->
+<div class="panel" id="p1">
+  <div class="hdr">
+    <h2>Investment Growth</h2>
+    <p>See how compound interest builds your portfolio over time.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Starting Amount</label>
+      <input type="number" id="i-init" value="10000" oninput="calcI()">
+    </div>
+    <div class="field">
+      <label>Monthly Contribution</label>
+      <input type="number" id="i-mo" value="500" oninput="calcI()">
+    </div>
+    <div class="field">
+      <label>Annual Return (%)</label>
+      <input type="number" id="i-rate" value="7" step="0.5" oninput="calcI()">
+    </div>
+    <div class="field">
+      <label>Time Period</label>
+      <select id="i-yrs" onchange="calcI()">
+        <option value="5">5 years</option>
+        <option value="10">10 years</option>
+        <option value="20" selected>20 years</option>
+        <option value="30">30 years</option>
+        <option value="40">40 years</option>
+      </select>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Final Portfolio Value</div>
+    <div class="hero-val" id="i-final">&mdash;</div>
+    <div class="hero-note" id="i-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Contributed</div><div class="stat-val" id="i-contrib">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Interest Earned</div><div class="stat-val lime" id="i-gains">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Money Multiplied</div><div class="stat-val teal" id="i-mult">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Portfolio Growth</div><div style="height:220px"><canvas id="i-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     3. SALARY ↔ HOURLY (two-way)
+     2025 IRS brackets, FICA, standard deduction
+═══════════════════════════════════════════ -->
+<div class="panel" id="p2">
+  <div class="hdr">
+    <h2>Salary ↔ Hourly</h2>
+    <p>Enter either your annual salary <strong>or</strong> hourly rate — the other fills in automatically.</p>
+  </div>
+  <div class="mode-toggle">
+    <button id="s-mode-salary" class="mode-btn active" onclick="setSMode('salary')">Annual → Hourly</button>
+    <button id="s-mode-hourly" class="mode-btn inactive" onclick="setSMode('hourly')">Hourly → Annual</button>
+  </div>
+  <div class="fields">
+    <div class="field" id="s-field-ann">
+      <label>Annual Salary</label>
+      <input type="number" id="s-ann" value="75000" oninput="calcS('salary')">
+    </div>
+    <div class="field" id="s-field-hr" style="display:none">
+      <label>Hourly Rate</label>
+      <input type="number" id="s-hrly" value="36.06" step="0.01" oninput="calcS('hourly')">
+    </div>
+    <div class="field">
+      <label>Filing Status</label>
+      <select id="s-filing" onchange="calcS()">
+        <option value="single">Single</option>
+        <option value="mfj">Married Filing Jointly</option>
+        <option value="hoh">Head of Household</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Hours per Week</label>
+      <input type="number" id="s-hrs" value="40" oninput="calcS()">
+    </div>
+    <div class="field">
+      <label>Weeks per Year</label>
+      <input type="number" id="s-wks" value="52" oninput="calcS()">
+    </div>
+  </div>
+  <div class="dual-hero">
+    <div class="hero" style="margin-bottom:0">
+      <div class="hero-label">Annual Salary</div>
+      <div class="hero-val" id="s-out-ann" style="font-size:32px">&mdash;</div>
+      <div class="hero-note" id="s-net-ann">&mdash; net/yr</div>
+    </div>
+    <div class="hero hero-teal" style="margin-bottom:0">
+      <div class="hero-label">Hourly Rate</div>
+      <div class="hero-val" id="s-out-hr" style="font-size:32px;color:var(--teal)">&mdash;</div>
+      <div class="hero-note" id="s-net-hr">&mdash; net/hr</div>
+    </div>
+  </div>
+  <div class="stats" style="margin-bottom:16px">
+    <div class="stat"><div class="stat-label">Federal Tax</div><div class="stat-val" id="s-fed-tax">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">FICA (SS + Medicare)</div><div class="stat-val" id="s-fica">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Effective Rate</div><div class="stat-val lime" id="s-eff-rate">&mdash;</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Pay Period</th><th>Gross Pay</th><th>Total Tax (−)</th><th>Net Take-Home</th></tr></thead>
+      <tbody id="s-rows"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4. LOAN PAYOFF
+═══════════════════════════════════════════ -->
+<div class="panel" id="p3">
+  <div class="hdr">
+    <h2>Loan Payoff</h2>
+    <p>Discover exactly how much extra payments save you in time and interest.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Loan Balance</label>
+      <input type="number" id="lp-bal" value="25000" oninput="calcLP()">
+    </div>
+    <div class="field">
+      <label>Interest Rate (%)</label>
+      <input type="number" id="lp-rate" value="8" step="0.1" oninput="calcLP()">
+    </div>
+    <div class="field">
+      <label>Monthly Payment</label>
+      <input type="number" id="lp-pay" value="500" oninput="calcLP()">
+    </div>
+    <div class="field">
+      <label>Extra Payment / Month</label>
+      <input type="number" id="lp-xtra" value="100" oninput="calcLP()">
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Payoff With Extra Payment</div>
+    <div class="hero-val lime" id="lp-acc">&mdash;</div>
+    <div class="hero-note" id="lp-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Without Extra</div><div class="stat-val" id="lp-std">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Time Saved</div><div class="stat-val lime" id="lp-tsave">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Interest Saved</div><div class="stat-val lime" id="lp-isave">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Remaining Balance</div><div style="height:200px"><canvas id="lp-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     5. NET WORTH
+     Improved: separate asset growth rate and debt paydown input
+═══════════════════════════════════════════ -->
+<div class="panel" id="p4">
+  <div class="hdr">
+    <h2>Net Worth Tracker</h2>
+    <p>Project your net worth over the next 30 years.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Total Assets</label>
+      <input type="number" id="nw-a" value="150000" oninput="calcNW()">
+    </div>
+    <div class="field">
+      <label>Total Debts</label>
+      <input type="number" id="nw-d" value="80000" oninput="calcNW()">
+    </div>
+    <div class="field">
+      <label>Monthly Savings Added</label>
+      <input type="number" id="nw-s" value="1500" oninput="calcNW()">
+    </div>
+    <div class="field">
+      <label>Monthly Debt Paydown</label>
+      <input type="number" id="nw-dp" value="800" oninput="calcNW()">
+      <span class="hint">How much you pay toward debt each month</span>
+    </div>
+    <div class="field">
+      <label>Annual Return on Assets (%)</label>
+      <input type="number" id="nw-r" value="6" step="0.5" oninput="calcNW()">
+    </div>
+    <div class="field">
+      <label>Average Debt Interest (%)</label>
+      <input type="number" id="nw-dr" value="5" step="0.5" oninput="calcNW()">
+      <span class="hint">Weighted average rate across your debts</span>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Current Net Worth</div>
+    <div class="hero-val" id="nw-now">&mdash;</div>
+    <div class="hero-note" id="nw-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">In 10 Years</div><div class="stat-val lime" id="nw-10">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">In 20 Years</div><div class="stat-val teal" id="nw-20">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">In 30 Years</div><div class="stat-val gold" id="nw-30">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">30-Year Projection</div><div style="height:200px"><canvas id="nw-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     6. BUDGET
+═══════════════════════════════════════════ -->
+<div class="panel" id="p5">
+  <div class="hdr">
+    <h2>Budget Planner</h2>
+    <p>Enter your income and expenses. See your savings rate instantly.</p>
+  </div>
+  <div class="fields" style="grid-template-columns:1fr; margin-bottom:20px">
+    <div class="field">
+      <label>Monthly Income (After Tax)</label>
+      <input type="number" id="b-inc" value="5000" oninput="calcB()">
+    </div>
+  </div>
+  <div id="b-rows-wrap"></div>
+  <button class="btn-add-full" onclick="addBRow()">+ Add Category</button>
+  <div class="hero">
+    <div class="hero-label">Monthly Surplus</div>
+    <div class="hero-val" id="b-surp">&mdash;</div>
+    <div class="hero-note" id="b-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Expenses</div><div class="stat-val red" id="b-exp">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Savings Rate</div><div class="stat-val lime" id="b-rate">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Spending Breakdown</div><div style="height:240px"><canvas id="b-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     7. RETIREMENT — 4% Rule (Trinity Study 1998)
+═══════════════════════════════════════════ -->
+<div class="panel" id="p6">
+  <div class="hdr">
+    <h2>Retirement Calculator</h2>
+    <p>Will your savings last? Based on the industry-standard 4% Rule.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Current Age</label>
+      <input type="number" id="r-age" value="30" oninput="calcR()">
+    </div>
+    <div class="field">
+      <label>Retirement Age</label>
+      <input type="number" id="r-ret" value="65" oninput="calcR()">
+    </div>
+    <div class="field">
+      <label>Current Savings</label>
+      <input type="number" id="r-sav" value="25000" oninput="calcR()">
+    </div>
+    <div class="field">
+      <label>Monthly Contribution</label>
+      <input type="number" id="r-con" value="800" oninput="calcR()">
+    </div>
+    <div class="field">
+      <label>Annual Return (%)</label>
+      <input type="number" id="r-rtn" value="7" step="0.5" oninput="calcR()">
+    </div>
+    <div class="field">
+      <label>Monthly Need in Retirement</label>
+      <input type="number" id="r-need" value="4000" oninput="calcR()">
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Nest Egg at Retirement</div>
+    <div class="hero-val" id="r-nest">&mdash;</div>
+    <div class="hero-note" id="r-status"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Safe Monthly Withdrawal</div><div class="stat-val lime" id="r-with">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Funds Last</div><div class="stat-val teal" id="r-last">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Years to Save</div><div class="stat-val" id="r-yrs">&mdash;</div></div>
+  </div>
+  <div class="infobox">&#x1F4D6; <strong>4% Rule</strong> (Trinity Study, 1998): Withdrawing 4% of your portfolio annually has historically sustained a 30-year retirement with a diversified portfolio.</div>
+  <div class="chart-wrap"><div class="chart-lbl">Growth → Drawdown</div><div style="height:220px"><canvas id="r-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     8. SAVINGS GOAL
+     PMT = FV_needed · r / ((1+r)^n − 1)
+═══════════════════════════════════════════ -->
+<div class="panel" id="p7">
+  <div class="hdr">
+    <h2>Savings Goal Planner</h2>
+    <p>Find out how much to save each month to reach any goal.</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Goal Amount</label>
+      <input type="number" id="sg-goal" value="50000" oninput="calcSG()">
+    </div>
+    <div class="field">
+      <label>Already Saved</label>
+      <input type="number" id="sg-have" value="5000" oninput="calcSG()">
+    </div>
+    <div class="field">
+      <label>Time to Reach Goal</label>
+      <select id="sg-yrs" onchange="calcSG()">
+        <option value="1">1 year</option>
+        <option value="2">2 years</option>
+        <option value="3">3 years</option>
+        <option value="5" selected>5 years</option>
+        <option value="10">10 years</option>
+        <option value="15">15 years</option>
+        <option value="20">20 years</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Annual Return (%)</label>
+      <input type="number" id="sg-rate" value="4" step="0.5" oninput="calcSG()">
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Required Monthly Savings</div>
+    <div class="hero-val" id="sg-mo">&mdash;</div>
+    <div class="hero-note" id="sg-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Still Need</div><div class="stat-val" id="sg-need">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Interest Earned</div><div class="stat-val lime" id="sg-int">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Progress to Goal</div><div style="height:200px"><canvas id="sg-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     9. DEBT SNOWBALL
+     Pay smallest balances first, roll freed payments forward
+═══════════════════════════════════════════ -->
+<div class="panel" id="p8">
+  <div class="hdr">
+    <h2>Debt Snowball</h2>
+    <p>Pay smallest balances first — build momentum, get debt-free faster.</p>
+  </div>
+  <div class="fields" style="grid-template-columns:1fr; margin-bottom:20px">
+    <div class="field">
+      <label>Total Monthly Budget for Debt Payments</label>
+      <input type="number" id="ds-bud" value="800" oninput="calcDS()">
+    </div>
+  </div>
+  <div class="chart-lbl" style="margin-bottom:10px">YOUR DEBTS — sorted smallest to largest</div>
+  <div class="add-debt-row">
+    <input type="text"   id="ds-n" placeholder="Debt name (e.g. Credit Card)">
+    <input type="number" id="ds-b" placeholder="Balance ($)">
+    <input type="number" id="ds-r" placeholder="Rate %" step="0.1">
+    <button class="btn-add" onclick="addD()" title="Add debt">+</button>
+  </div>
+  <div id="ds-cards"></div>
+  <div class="hero" style="margin-top:8px">
+    <div class="hero-label">You'll Be Debt-Free In</div>
+    <div class="hero-val lime" id="ds-free">&mdash;</div>
+    <div class="hero-note" id="ds-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Debt</div><div class="stat-val red" id="ds-tot">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Total Interest</div><div class="stat-val red" id="ds-int">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Payoff Progress</div><div style="height:200px"><canvas id="ds-chart"></canvas></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     10. RENT vs BUY
+     Improved: rent inflation, property tax, maintenance
+═══════════════════════════════════════════ -->
+<div class="panel" id="p9">
+  <div class="hdr">
+    <h2>Rent vs Buy</h2>
+    <p>Which builds more wealth — buying a home or renting and investing the difference?</p>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Home Price</label>
+      <input type="number" id="rv-price" value="400000" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Down Payment (%)</label>
+      <input type="number" id="rv-down" value="20" step="1" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Mortgage Rate (%)</label>
+      <input type="number" id="rv-mrate" value="6.5" step="0.1" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Monthly Rent (Starting)</label>
+      <input type="number" id="rv-rent" value="2200" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Home Appreciation (%/yr)</label>
+      <input type="number" id="rv-appr" value="3" step="0.5" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Investment Return (%/yr)</label>
+      <input type="number" id="rv-inv" value="7" step="0.5" oninput="calcRV()">
+    </div>
+    <div class="field">
+      <label>Annual Rent Increase (%)</label>
+      <input type="number" id="rv-rinc" value="3.5" step="0.5" oninput="calcRV()">
+      <span class="hint">Typical rent inflation: 3–5% per year</span>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="hero-label">Break-Even Point</div>
+    <div class="hero-val" id="rv-break">&mdash;</div>
+    <div class="hero-note" id="rv-note"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Monthly Mortgage P+I</div><div class="stat-val" id="rv-mo">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Buy — 10yr Net Worth</div><div class="stat-val lime" id="rv-b10">&mdash;</div></div>
+    <div class="stat"><div class="stat-label">Rent+Invest — 10yr</div><div class="stat-val teal" id="rv-r10">&mdash;</div></div>
+  </div>
+  <div class="chart-wrap"><div class="chart-lbl">Net Worth: Buying vs Renting &amp; Investing</div><div style="height:220px"><canvas id="rv-chart"></canvas></div></div>
+</div>
+
+</div><!-- /page -->
+
+<div class="site-footer">
+  FinanceLab &mdash; For educational purposes only. Not financial advice.
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const ch = {};
+let _debtId = 0; // unique ID counter for debts
+
+function fmt(n) {
+  if (n === undefined || n === null || isNaN(n)) return '\u2014';
+  const abs = Math.abs(n), sign = n < 0 ? '-' : '';
+  if (abs >= 1e6) return sign + '$' + (abs / 1e6).toFixed(2) + 'M';
+  if (abs >= 1e3) return sign + '$' + Math.round(abs).toLocaleString();
+  return sign + '$' + abs.toFixed(2);
+}
+
+function mos(m) {
+  if (!isFinite(m) || m > 700) return '50+ yrs';
+  const y = Math.floor(m / 12), r = Math.round(m % 12);
+  return (y > 0 && r > 0) ? `${y}y ${r}m` : y > 0 ? `${y} yr${y > 1 ? 's' : ''}` : `${r} mo`;
+}
+
+function mkChart(id, cfg) {
+  if (ch[id]) ch[id].destroy();
+  ch[id] = new Chart($(id), cfg);
+}
+
+const CLRS = ['#c8f55a','#5af0c8','#ff8f5a','#a87fff','#f5c050','#5a9fff','#ff5f9f','#5affb8'];
+
+function darkOpts(legend = false) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: legend, labels: { color: '#999aa8', font: { size: 11 }, padding: 14, boxWidth: 12 } },
+      tooltip: { callbacks: { label: c => ' ' + fmt(c.parsed.y !== undefined ? c.parsed.y : c.parsed) } }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#666672', font: { size: 11 }, maxTicksLimit: 10 },
+        grid: { display: false }
+      },
+      y: {
+        ticks: {
+          color: '#666672', font: { size: 11 },
+          callback: v => {
+            const a = Math.abs(v);
+            return (v < 0 ? '-' : '') + '$' + (a >= 1e6 ? (a/1e6).toFixed(1)+'M' : a >= 1e3 ? Math.round(a/1000)+'k' : Math.round(a));
+          }
+        },
+        grid: { color: 'rgba(255,255,255,0.04)' }
+      }
+    }
+  };
+}
+
+// ══════════════════════════════════════════════════
+// 1. MORTGAGE
+// M = P·r·(1+r)^n / ((1+r)^n − 1)
+// ══════════════════════════════════════════════════
+function calcM() {
+  const price = +$('m-price').value || 0;
+  const down  = +$('m-down').value  || 0;
+  const rate  = +$('m-rate').value  || 0;
+  const term  = +$('m-term').value  || 30;
+  const loan  = price - down;
+  const r     = rate / 100 / 12;
+  const n     = term * 12;
+
+  $('m-pct').textContent = price > 0 ? `${(down / price * 100).toFixed(1)}% down` : '';
+
+  if (loan <= 0 || rate <= 0) { $('m-pay').textContent = '\u2014'; return; }
+
+  const M = r > 0 ? loan * r * Math.pow(1+r,n) / (Math.pow(1+r,n) - 1) : loan / n;
+  const totalInt = M * n - loan;
+
+  $('m-pay').textContent  = fmt(M);
+  $('m-note').textContent = `${term}-year fixed @ ${rate}%`;
+  $('m-loan').textContent = fmt(loan);
+  $('m-tint').textContent = fmt(totalInt);
+  $('m-tot').textContent  = fmt(M * n + down);
+
+  const lbs = [], pData = [], iData = [];
+  let bal = loan, rows = '';
+  for (let y = 1; y <= term; y++) {
+    let yP = 0, yI = 0;
+    for (let mo = 0; mo < 12; mo++) {
+      const i = bal * r, p = Math.min(M - i, bal);
+      yI += i; yP += p; bal = Math.max(0, bal - p);
+    }
+    lbs.push('Yr ' + y);
+    pData.push(Math.round(yP));
+    iData.push(Math.round(yI));
+    if (y <= 5 || y % 5 === 0 || y === term) {
+      rows += `<tr><td>Year ${y}</td><td class="pos">${fmt(yP)}</td><td class="neg">${fmt(yI)}</td><td>${fmt(Math.max(0, bal))}</td></tr>`;
+    }
+  }
+  $('m-rows').innerHTML = rows;
+
+  mkChart('m-chart', {
+    type: 'bar',
+    data: {
+      labels: lbs,
+      datasets: [
+        { label: 'Principal', data: pData, backgroundColor: 'rgba(200,245,90,0.7)', borderRadius: 2 },
+        { label: 'Interest',  data: iData, backgroundColor: 'rgba(255,95,95,0.5)',  borderRadius: 2 }
+      ]
+    },
+    options: { ...darkOpts(true), scales: { ...darkOpts().scales } }
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 2. INVESTMENT GROWTH
+// FV = PV·(1+r)^n + PMT·((1+r)^n−1)/r  (monthly compounding)
+// ══════════════════════════════════════════════════
+function calcI() {
+  const init = +$('i-init').value || 0;
+  const mo   = +$('i-mo').value   || 0;
+  const rate = +$('i-rate').value || 0;
+  const yrs  = +$('i-yrs').value  || 20;
+  const r    = rate / 100 / 12;
+
+  const lbs = ['Now'], vData = [Math.round(init)], cData = [Math.round(init)];
+  for (let y = 1; y <= yrs; y++) {
+    const nt = 12 * y, gf = Math.pow(1 + r, nt);
+    const fv = r > 0 ? init * gf + mo * ((gf - 1) / r) : init + mo * nt;
+    lbs.push('Yr ' + y);
+    vData.push(Math.round(fv));
+    cData.push(Math.round(init + mo * nt));
+  }
+
+  const fv      = vData[vData.length - 1];
+  const contrib = init + mo * 12 * yrs;
+  const gains   = Math.max(0, fv - contrib);
+
+  $('i-final').textContent  = fmt(fv);
+  $('i-note').textContent   = `${yrs} yrs @ ${rate}% \u2014 put in ${fmt(contrib)}, earned ${fmt(gains)}`;
+  $('i-contrib').textContent = fmt(contrib);
+  $('i-gains').textContent  = fmt(gains);
+  $('i-mult').textContent   = (fv / Math.max(contrib, 1)).toFixed(2) + 'x';
+
+  mkChart('i-chart', {
+    type: 'line',
+    data: {
+      labels: lbs,
+      datasets: [
+        { label: 'Portfolio',    data: vData, borderColor: '#c8f55a', backgroundColor: 'rgba(200,245,90,0.08)', fill: true,  tension: .35, pointRadius: 0, borderWidth: 2.5 },
+        { label: 'Contributed', data: cData, borderColor: 'rgba(255,255,255,0.18)', fill: false, tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [5, 5] }
+      ]
+    },
+    options: darkOpts(false)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 3. SALARY ↔ HOURLY
+// 2025 IRS brackets (Revenue Procedure 2024-40)
+// ══════════════════════════════════════════════════
+const TAX_BRACKETS = {
+  single: [[0.10,11925],[0.12,48475],[0.22,103350],[0.24,197300],[0.32,250525],[0.35,626350],[0.37,Infinity]],
+  mfj:    [[0.10,23850],[0.12,96950],[0.22,206700],[0.24,394600],[0.32,501050],[0.35,751600],[0.37,Infinity]],
+  hoh:    [[0.10,17000],[0.12,64850],[0.22,103350],[0.24,197300],[0.32,250500],[0.35,626350],[0.37,Infinity]]
+};
+const STD_DEDUCTION = { single: 15750, mfj: 31500, hoh: 23625 };
+const SS_WAGE_BASE = 176100, SS_RATE = 0.062, MEDICARE_RATE = 0.0145;
+
+function fedTax(taxableIncome, filing) {
+  const brackets = TAX_BRACKETS[filing];
+  let tax = 0, prev = 0;
+  for (const [rate, cap] of brackets) {
+    if (taxableIncome <= 0) break;
+    const slice = Math.min(taxableIncome, cap - prev);
+    tax += slice * rate;
+    taxableIncome -= slice;
+    prev = cap;
+  }
+  return tax;
+}
+
+let sModeActive = 'salary';
+
+function setSMode(mode) {
+  sModeActive = mode;
+  $('s-mode-salary').className = 'mode-btn ' + (mode === 'salary' ? 'active' : 'inactive');
+  $('s-mode-hourly').className = 'mode-btn ' + (mode === 'hourly' ? 'active' : 'inactive');
+  $('s-field-ann').style.display = mode === 'salary' ? '' : 'none';
+  $('s-field-hr').style.display  = mode === 'hourly' ? '' : 'none';
+  calcS(mode);
+}
+
+function calcS(source) {
+  const mode    = source || sModeActive;
+  const hrs     = +$('s-hrs').value  || 40;
+  const wks     = +$('s-wks').value  || 52;
+  const filing  = $('s-filing').value;
+  const totalHrs = hrs * wks;
+
+  let ann, h;
+  if (mode === 'salary') {
+    ann = +$('s-ann').value || 0;
+    h   = totalHrs > 0 ? ann / totalHrs : 0;
+    $('s-hrly').value = h.toFixed(2);
+  } else {
+    h   = +$('s-hrly').value || 0;
+    ann = h * totalHrs;
+    $('s-ann').value = Math.round(ann);
+  }
+
+  const stdDed    = STD_DEDUCTION[filing];
+  const taxable   = Math.max(0, ann - stdDed);
+  const fedAnnual = fedTax(taxable, filing);
+  const ssAnnual  = Math.min(ann, SS_WAGE_BASE) * SS_RATE;
+  const medAnnual = ann * MEDICARE_RATE;
+  const ficaAnnual = ssAnnual + medAnnual;
+  const totalTaxAnn = fedAnnual + ficaAnnual;
+  const netAnn      = ann - totalTaxAnn;
+  const effRate     = ann > 0 ? (totalTaxAnn / ann * 100).toFixed(1) : '0.0';
+
+  $('s-out-ann').textContent = fmt(ann);
+  $('s-out-hr').textContent  = '$' + h.toFixed(2) + '/hr';
+  $('s-net-ann').textContent = fmt(netAnn) + ' take-home/yr';
+  $('s-net-hr').textContent  = '$' + (totalHrs > 0 ? (netAnn / totalHrs).toFixed(2) : '0.00') + ' take-home/hr';
+  $('s-fed-tax').textContent  = fmt(fedAnnual) + ' (' + (ann > 0 ? (fedAnnual/ann*100).toFixed(1) : 0) + '%)';
+  $('s-fica').textContent     = fmt(ficaAnnual) + ' (' + (ann > 0 ? (ficaAnnual/ann*100).toFixed(1) : 0) + '%)';
+  $('s-eff-rate').textContent = effRate + '%';
+
+  const periods = [
+    ['Annual',    ann,       totalTaxAnn,          false],
+    ['Monthly',   ann/12,    totalTaxAnn/12,       false],
+    ['Bi-Weekly', ann/26,    totalTaxAnn/26,       false],
+    ['Weekly',    ann/wks,   totalTaxAnn/wks,      false],
+    ['Daily',     ann/wks/5, totalTaxAnn/wks/5,    false],
+    ['Hourly',    h,         totalHrs > 0 ? totalTaxAnn/totalHrs : 0, true],
+  ];
+
+  $('s-rows').innerHTML = periods.map(([period, gross, tax, isHr]) => {
+    const net = gross - tax;
+    const fv  = v => isHr ? '$' + v.toFixed(2) : fmt(v);
+    return `<tr><td>${period}</td><td>${fv(gross)}</td><td class="neg">\u2212${fv(tax)}</td><td class="pos">${fv(net)}</td></tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// 4. LOAN PAYOFF — iterative monthly sim
+// ══════════════════════════════════════════════════
+function simLoan(bal, rate, pay) {
+  const r = rate / 100 / 12;
+  let b = bal, m = 0, int = 0;
+  while (b > 0.01 && m < 1200) {
+    const i = b * r, p = Math.min(pay - i, b);
+    if (p <= 0) return { m: Infinity, int: Infinity };
+    int += i; b -= p; m++;
+  }
+  return { m, int };
+}
+
+function calcLP() {
+  const bal  = +$('lp-bal').value  || 0;
+  const rate = +$('lp-rate').value || 0;
+  const pay  = +$('lp-pay').value  || 0;
+  const xtra = +$('lp-xtra').value || 0;
+  const std  = simLoan(bal, rate, pay);
+  const acc  = simLoan(bal, rate, pay + xtra);
+
+  $('lp-std').textContent   = isFinite(std.m) ? mos(std.m) : 'Payment too low';
+  $('lp-acc').textContent   = isFinite(acc.m) ? mos(acc.m) : '\u2014';
+  $('lp-tsave').textContent = (isFinite(std.m) && isFinite(acc.m)) ? mos(std.m - acc.m) : '\u2014';
+  $('lp-isave').textContent = (isFinite(std.int) && isFinite(acc.int)) ? fmt(std.int - acc.int) : '\u2014';
+  $('lp-note').textContent  = isFinite(acc.int) ? `Total interest paid: ${fmt(acc.int)}` : '';
+
+  const r = rate / 100 / 12;
+  const lbs = [], sD = [], aD = [];
+  let sb = bal, ab = bal;
+  const maxM = isFinite(std.m) ? std.m : (isFinite(acc.m) ? acc.m * 2 : 120);
+  const step = Math.max(1, Math.round(maxM / 36));
+  for (let m = 0; m <= maxM; m += step) {
+    lbs.push(m === 0 ? 'Now' : m < 12 ? m + 'mo' : Math.round(m / 12) + 'yr');
+    sD.push(Math.max(0, Math.round(sb)));
+    aD.push(Math.max(0, Math.round(ab)));
+    for (let s = 0; s < step; s++) {
+      if (sb > 0) { const i = sb * r; sb = Math.max(0, sb - Math.max(0, pay - i)); }
+      if (ab > 0) { const i = ab * r; ab = Math.max(0, ab - Math.max(0, pay + xtra - i)); }
+    }
+  }
+
+  mkChart('lp-chart', {
+    type: 'line',
+    data: {
+      labels: lbs,
+      datasets: [
+        { label: 'Standard',   data: sD, borderColor: '#ff5f5f', backgroundColor: 'rgba(255,95,95,0.06)',  fill: true, tension: .3, pointRadius: 0, borderWidth: 2 },
+        { label: 'With Extra', data: aD, borderColor: '#c8f55a', backgroundColor: 'rgba(200,245,90,0.06)', fill: true, tension: .3, pointRadius: 0, borderWidth: 2.5 }
+      ]
+    },
+    options: darkOpts(true)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 5. NET WORTH — IMPROVED: explicit debt paydown + interest
+// Monthly simulation: assets compound at return rate,
+// debts accrue interest and are reduced by paydown amount
+// ══════════════════════════════════════════════════
+function calcNW() {
+  const a      = +$('nw-a').value  || 0;
+  const d      = +$('nw-d').value  || 0;
+  const s      = +$('nw-s').value  || 0;   // monthly savings to assets
+  const dp     = +$('nw-dp').value || 0;   // monthly debt paydown
+  const rateA  = +$('nw-r').value  || 0;   // annual return on assets
+  const rateD  = +$('nw-dr').value || 0;   // annual interest on debts
+  const ra     = rateA / 100 / 12;
+  const rd     = rateD / 100 / 12;
+  const nw0    = a - d;
+
+  $('nw-now').textContent  = fmt(nw0);
+  $('nw-note').textContent = `Saving ${fmt(s)}/mo, paying ${fmt(dp)}/mo toward debt`;
+
+  const lbs = ['Now'], vData = [Math.round(nw0)];
+  let assetBal = a, debtBal = d;
+
+  for (let y = 1; y <= 30; y++) {
+    for (let mo = 0; mo < 12; mo++) {
+      // Assets grow and receive new savings
+      assetBal = assetBal * (1 + ra) + s;
+      // Debts accrue interest and receive paydown
+      if (debtBal > 0) {
+        debtBal = debtBal * (1 + rd) - dp;
+        if (debtBal < 0) {
+          // Debt is paid off — redirect excess to assets
+          assetBal += Math.abs(debtBal);
+          debtBal = 0;
+        }
+      } else {
+        // Once debt-free, debt paydown goes to assets
+        assetBal += dp;
+      }
+    }
+    lbs.push('Yr ' + y);
+    vData.push(Math.round(assetBal - debtBal));
+  }
+
+  $('nw-10').textContent = fmt(vData[10]);
+  $('nw-20').textContent = fmt(vData[20]);
+  $('nw-30').textContent = fmt(vData[30]);
+
+  mkChart('nw-chart', {
+    type: 'line',
+    data: { labels: lbs, datasets: [{ label: 'Net Worth', data: vData, borderColor: '#5af0c8', backgroundColor: 'rgba(90,240,200,0.07)', fill: true, tension: .4, pointRadius: 0, borderWidth: 2.5 }] },
+    options: darkOpts(false)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 6. BUDGET
+// ══════════════════════════════════════════════════
+let bItems = [
+  { name: 'Housing / Rent',   amt: 1500 },
+  { name: 'Food & Groceries', amt: 600  },
+  { name: 'Transportation',   amt: 400  },
+  { name: 'Utilities',        amt: 200  },
+  { name: 'Entertainment',    amt: 200  },
+  { name: 'Healthcare',       amt: 150  },
+];
+
+function renderBRows() {
+  $('b-rows-wrap').innerHTML = bItems.map((it, i) => `
+    <div class="row-item">
+      <input type="text"   value="${it.name}" oninput="bItems[${i}].name=this.value;calcB()" placeholder="Category">
+      <input type="number" value="${it.amt}"  oninput="bItems[${i}].amt=+this.value;calcB()" placeholder="Amount">
+      <button class="btn-del" onclick="bItems.splice(${i},1);renderBRows()" title="Remove">\u00d7</button>
+    </div>`).join('');
+  calcB();
+}
+
+function addBRow() { bItems.push({ name: 'New Category', amt: 0 }); renderBRows(); }
+
+function calcB() {
+  const inc  = +$('b-inc').value || 0;
+  const tot  = bItems.reduce((s, it) => s + (+it.amt || 0), 0);
+  const surp = inc - tot;
+  const rate = inc > 0 ? surp / inc * 100 : 0;
+
+  $('b-surp').textContent       = fmt(surp);
+  $('b-surp').style.color       = surp >= 0 ? 'var(--lime)' : 'var(--red)';
+  $('b-note').textContent       = surp >= 0 ? `${rate.toFixed(1)}% savings rate` : `Overspending by ${fmt(-surp)}/mo`;
+  $('b-exp').textContent        = fmt(tot);
+  $('b-rate').textContent       = rate.toFixed(1) + '%';
+  $('b-rate').style.color       = rate >= 20 ? 'var(--lime)' : rate >= 10 ? 'var(--gold)' : 'var(--red)';
+
+  // Only include positive-amount items in chart; add Savings only if positive
+  const chartItems = bItems.filter(x => (+x.amt || 0) > 0);
+  if (surp > 0) chartItems.push({ name: 'Savings', amt: surp });
+
+  mkChart('b-chart', {
+    type: 'doughnut',
+    data: {
+      labels: chartItems.map(x => x.name),
+      datasets: [{ data: chartItems.map(x => +x.amt || 0), backgroundColor: CLRS, borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '58%',
+      plugins: {
+        legend: { display: true, position: 'right', labels: { color: '#999aa8', font: { size: 11 }, padding: 10, boxWidth: 12 } },
+        tooltip: { callbacks: { label: c => ` ${c.label}: ${fmt(c.parsed)}` } }
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 7. RETIREMENT
+// Accumulation: FV formula (monthly compounding)
+// 4% Rule: safe withdrawal = nest * 0.04 / 12
+// Drawdown: monthly simulation at conservative return
+// ══════════════════════════════════════════════════
+function calcR() {
+  const age  = +$('r-age').value  || 30;
+  const ret  = +$('r-ret').value  || 65;
+  const sav  = +$('r-sav').value  || 0;
+  const con  = +$('r-con').value  || 0;
+  const rtn  = +$('r-rtn').value  || 0;
+  const need = +$('r-need').value || 0;
+  const yrs  = Math.max(0, ret - age);
+
+  $('r-yrs').textContent = yrs + ' yrs';
+
+  const r  = rtn / 100 / 12;
+  const n  = yrs * 12;
+  const gf = Math.pow(1 + r, n);
+  const nest = r > 0 ? sav * gf + con * ((gf - 1) / r) : sav + con * n;
+  const safe4 = nest * 0.04 / 12;
+
+  const dr = Math.min(rtn / 100, 0.05) / 12;
+  let bal = nest, dm = 0;
+  while (bal > 0.01 && dm < 600) { bal = bal * (1 + dr) - need; dm++; }
+
+  $('r-nest').textContent = fmt(nest);
+  $('r-with').textContent = fmt(safe4) + '/mo';
+  $('r-last').textContent = bal > 0 ? '50+ yrs' : mos(dm);
+
+  const ok = safe4 >= need;
+  $('r-status').textContent = ok
+    ? `\u2705 On track \u2014 4% rule gives ${fmt(safe4)}/mo, you need ${fmt(need)}/mo`
+    : `\u26A0\uFE0F Shortfall \u2014 4% gives ${fmt(safe4)}/mo, you need ${fmt(need)}/mo`;
+
+  const lbs = [], vData = [];
+  for (let y = 0; y <= yrs; y++) {
+    const nt = 12 * y, g = Math.pow(1 + r, nt);
+    lbs.push('Age ' + (age + y));
+    vData.push(Math.round(r > 0 ? sav * g + con * ((g - 1) / r) : sav + con * nt));
+  }
+  let dBal = nest;
+  const drawYrs = Math.min(40, Math.ceil(dm / 12) + 5);
+  for (let y = 1; y <= drawYrs; y++) {
+    lbs.push('Age ' + (ret + y));
+    for (let m = 0; m < 12; m++) dBal = Math.max(0, dBal * (1 + dr) - need);
+    vData.push(Math.round(dBal));
+    if (dBal <= 0) break;
+  }
+
+  mkChart('r-chart', {
+    type: 'line',
+    data: { labels: lbs, datasets: [{ data: vData, borderColor: '#c8f55a', backgroundColor: 'rgba(200,245,90,0.07)', fill: true, tension: .35, pointRadius: 0, borderWidth: 2.5 }] },
+    options: darkOpts(false)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 8. SAVINGS GOAL
+// PMT = FV_needed · r / ((1+r)^n − 1)
+// ══════════════════════════════════════════════════
+function calcSG() {
+  const goal = +$('sg-goal').value || 0;
+  const have = +$('sg-have').value || 0;
+  const yrs  = +$('sg-yrs').value  || 5;
+  const rate = +$('sg-rate').value || 0;
+  const r    = rate / 100 / 12;
+  const n    = yrs * 12;
+  const gf   = Math.pow(1 + r, n);
+  const fvHave   = have * gf;
+  const fvNeeded = goal - fvHave;
+
+  let monthly;
+  if (fvNeeded <= 0) monthly = 0;
+  else if (r === 0) monthly = fvNeeded / n;
+  else monthly = fvNeeded * r / (gf - 1);
+
+  const totalContrib = have + Math.max(0, monthly) * n;
+  const interest     = Math.max(0, goal - totalContrib);
+
+  $('sg-mo').textContent   = monthly <= 0 ? 'Already there! \uD83C\uDF89' : fmt(monthly) + '/mo';
+  $('sg-note').textContent = `To reach ${fmt(goal)} in ${yrs} year${yrs > 1 ? 's' : ''}`;
+  $('sg-need').textContent = fmt(Math.max(0, goal - have));
+  $('sg-int').textContent  = fmt(interest);
+
+  const lbs = ['Now'], vData = [Math.round(have)], gLine = [goal];
+  for (let y = 1; y <= yrs; y++) {
+    const nt = 12 * y, gfy = Math.pow(1 + r, nt);
+    const fv = r > 0 ? have * gfy + Math.max(0, monthly) * ((gfy - 1) / r) : have + Math.max(0, monthly) * nt;
+    lbs.push('Yr ' + y);
+    vData.push(Math.round(Math.min(fv, goal * 1.02)));
+    gLine.push(goal);
+  }
+
+  mkChart('sg-chart', {
+    type: 'line',
+    data: {
+      labels: lbs,
+      datasets: [
+        { label: 'Savings', data: vData, borderColor: '#c8f55a', backgroundColor: 'rgba(200,245,90,0.08)', fill: true, tension: .35, pointRadius: 0, borderWidth: 2.5 },
+        { label: 'Goal',    data: gLine, borderColor: 'rgba(255,255,255,0.2)', fill: false, tension: 0, pointRadius: 0, borderWidth: 1.5, borderDash: [6, 4] }
+      ]
+    },
+    options: darkOpts(false)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 9. DEBT SNOWBALL — IMPROVED with unique IDs and
+//    dynamic minimum payments that update as balances shrink
+// ══════════════════════════════════════════════════
+let debts = [
+  { id: ++_debtId, name: 'Credit Card',   balance: 4200,  rate: 19.9 },
+  { id: ++_debtId, name: 'Personal Loan', balance: 3500,  rate: 12.0 },
+  { id: ++_debtId, name: 'Car Loan',      balance: 11000, rate: 6.5  },
+];
+
+function renderDebts() {
+  const sorted = [...debts].sort((a, b) => a.balance - b.balance);
+  const total  = debts.reduce((s, d) => s + d.balance, 0);
+  $('ds-cards').innerHTML = sorted.map((d, i) => `
+    <div class="debt-card">
+      <div class="debt-info">
+        <div class="debt-name">${i === 0 ? '\uD83C\uDFAF ' : ''}<strong>#${i + 1}</strong> ${d.name}</div>
+        <div class="debt-meta">${fmt(d.balance)} @ ${d.rate}% APR</div>
+      </div>
+      <div class="debt-bar" style="max-width:120px">
+        <div class="debt-bar-fill" style="width:${total > 0 ? Math.round(d.balance / total * 100) : 0}%; background:${CLRS[i % CLRS.length]}"></div>
+      </div>
+      <button class="btn-del" onclick="removeDebt(${d.id})" title="Remove">\u00d7</button>
+    </div>`).join('');
+  calcDS();
+}
+
+function removeDebt(id) {
+  debts = debts.filter(d => d.id !== id);
+  renderDebts();
+}
+
+function addD() {
+  const name = ($('ds-n').value || 'Debt').trim();
+  const bal  = +$('ds-b').value;
+  const rate = +$('ds-r').value;
+  if (bal <= 0) return;
+  debts.push({ id: ++_debtId, name, balance: bal, rate });
+  $('ds-n').value = ''; $('ds-b').value = ''; $('ds-r').value = '';
+  renderDebts();
+}
+
+function calcDS() {
+  const budget = +$('ds-bud').value || 0;
+  const sorted = [...debts].sort((a, b) => a.balance - b.balance);
+  const total  = debts.reduce((s, d) => s + d.balance, 0);
+
+  $('ds-tot').textContent = fmt(total);
+
+  if (!sorted.length || budget <= 0) {
+    $('ds-free').textContent = '\u2014';
+    $('ds-int').textContent  = '\u2014';
+    $('ds-note').textContent = '';
+    return;
+  }
+
+  let bals    = sorted.map(d => d.balance);
+  const rates = sorted.map(d => d.rate / 100 / 12);
+  let months  = 0, totalInt = 0;
+
+  const lbs = ['Now'];
+  const datasets = sorted.map((d, i) => ({
+    label: d.name,
+    data: [Math.round(d.balance)],
+    borderColor: CLRS[i % CLRS.length],
+    backgroundColor: 'transparent',
+    tension: .3, pointRadius: 0, borderWidth: 2
+  }));
+
+  while (bals.some(b => b > 0.01) && months < 600) {
+    months++;
+
+    // Recalculate minimums dynamically each month
+    const mins = bals.map((b, i) => b > 0.01 ? Math.max(10, b * 0.01 + b * rates[i]) : 0);
+    const totalMin = mins.reduce((s, m) => s + m, 0);
+
+    // If budget can't even cover minimums, we're stuck
+    if (totalMin > budget * 1.5 && months > 1) {
+      // Allow some overshoot initially, but flag infinite loops
+    }
+
+    const extra = Math.max(0, budget - totalMin);
+    const tgt   = bals.findIndex(b => b > 0.01);
+
+    // Freed payments from paid-off debts go to target
+    let freed = 0;
+    // Calculate what the original minimums would have been
+    for (let i = 0; i < bals.length; i++) {
+      if (bals[i] <= 0.01 && i !== tgt) {
+        // This debt is paid off, its "share" of budget is freed
+        freed += 0; // Already captured via extra since mins[i] = 0
+      }
+    }
+
+    for (let i = 0; i < bals.length; i++) {
+      if (bals[i] <= 0.01) { bals[i] = 0; datasets[i].data.push(0); continue; }
+      const interest = bals[i] * rates[i];
+      totalInt += interest;
+      let pay = mins[i];
+      if (i === tgt) pay += extra;  // All extra goes to target (smallest)
+      pay = Math.min(pay, bals[i] + interest);
+      bals[i] = Math.max(0, bals[i] + interest - pay);
+      datasets[i].data.push(Math.round(bals[i]));
+    }
+
+    if (months % 3 === 0) lbs.push(months < 12 ? months + 'mo' : Math.round(months / 12) + 'yr');
+    else lbs.push('');
+  }
+
+  $('ds-free').textContent = months >= 600 ? 'Budget too low' : mos(months);
+  $('ds-int').textContent  = fmt(totalInt);
+  $('ds-note').textContent = months < 600 ? `Total paid: ${fmt(total + totalInt)} (${fmt(total)} principal + ${fmt(totalInt)} interest)` : 'Increase your monthly budget to pay off debts';
+
+  mkChart('ds-chart', {
+    type: 'line',
+    data: { labels: lbs, datasets },
+    options: { ...darkOpts(sorted.length > 1) }
+  });
+}
+
+// ══════════════════════════════════════════════════
+// 10. RENT vs BUY — IMPROVED: rent inflation included
+// ══════════════════════════════════════════════════
+function calcRV() {
+  const price   = +$('rv-price').value  || 0;
+  const downPct = +$('rv-down').value   || 20;
+  const mrate   = +$('rv-mrate').value  || 0;
+  const rentStart = +$('rv-rent').value || 0;
+  const appr    = +$('rv-appr').value   || 0;
+  const inv     = +$('rv-inv').value    || 0;
+  const rentInc = +$('rv-rinc').value   || 0;
+
+  const down  = price * downPct / 100;
+  const close = price * 0.03;
+  const loan  = price - down;
+  const mr    = mrate / 100 / 12;
+  const n     = 360;
+
+  const M = mr > 0 ? loan * mr * Math.pow(1 + mr, n) / (Math.pow(1 + mr, n) - 1) : loan / n;
+
+  // Ownership costs: P+I fixed, but tax/ins/maint grow with home value
+  const basePropTax = price * 0.012 / 12;
+  const baseIns     = price * 0.005 / 12;
+  const baseMaint   = price * 0.010 / 12;
+
+  $('rv-mo').textContent = fmt(M) + '/mo';
+
+  const ir = inv / 100 / 12;
+  const lbs = ['Now'], bVals = [0], rVals = [0];
+  let hVal = price, lBal = loan;
+  let rPort = down + close; // renter invests down + closing upfront
+  let currentRent = rentStart;
+  let breakeven = null;
+
+  for (let y = 1; y <= 30; y++) {
+    hVal *= (1 + appr / 100);
+
+    // Scale ownership costs with home appreciation
+    const yrPropTax = basePropTax * Math.pow(1 + appr / 100, y);
+    const yrIns     = baseIns * Math.pow(1 + appr / 100, y);
+    const yrMaint   = baseMaint * Math.pow(1 + appr / 100, y);
+    const totalOwn  = M + yrPropTax + yrIns + yrMaint;
+
+    for (let mo = 0; mo < 12; mo++) {
+      // Mortgage amortization
+      const i = lBal * mr, p = Math.min(M - i, lBal);
+      lBal = Math.max(0, lBal - p);
+
+      // Renter: invest difference (or pay more if rent > own)
+      const monthlySaved = totalOwn - currentRent;
+      if (monthlySaved > 0) {
+        // Owning costs more — renter saves the difference
+        rPort = rPort * (1 + ir) + monthlySaved;
+      } else {
+        // Renting costs more — renter still invests but adds nothing extra
+        rPort = rPort * (1 + ir);
+      }
+    }
+
+    // Rent increases annually
+    currentRent *= (1 + rentInc / 100);
+
+    const bNW = hVal - lBal;
+    const rNW = rPort;
+    bVals.push(Math.round(bNW));
+    rVals.push(Math.round(rNW));
+    lbs.push('Yr ' + y);
+    if (breakeven === null && bNW > rNW) breakeven = y;
+  }
+
+  $('rv-break').textContent = breakeven ? 'Year ' + breakeven : '30+ years';
+  $('rv-note').textContent  = breakeven
+    ? `Buying overtakes renting & investing after ${breakeven} years`
+    : `Renting & investing stays ahead for 30 years at these rates`;
+  $('rv-b10').textContent = fmt(bVals[10]);
+  $('rv-r10').textContent = fmt(rVals[10]);
+
+  mkChart('rv-chart', {
+    type: 'line',
+    data: {
+      labels: lbs,
+      datasets: [
+        { label: 'Buying',        data: bVals, borderColor: '#c8f55a', backgroundColor: 'rgba(200,245,90,0.07)', fill: true, tension: .35, pointRadius: 0, borderWidth: 2.5 },
+        { label: 'Rent + Invest', data: rVals, borderColor: '#5af0c8', backgroundColor: 'rgba(90,240,200,0.06)', fill: true, tension: .35, pointRadius: 0, borderWidth: 2 }
+      ]
+    },
+    options: darkOpts(true)
+  });
+}
+
+// ══════════════════════════════════════════════════
+// NAV CONTROLLER
+// ══════════════════════════════════════════════════
+const initFns = [calcM, calcI, () => setSMode('salary'), calcLP, calcNW, null, calcR, calcSG, null, calcRV];
+const done    = new Set([0]);
+
+function go(i) {
+  document.querySelectorAll('.panel').forEach((p, j) => p.classList.toggle('on', i === j));
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach((t, j) => t.classList.toggle('on', i === j));
+  // Scroll active tab into view on mobile
+  if (tabs[i]) tabs[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  if (!done.has(i)) {
+    done.add(i);
+    if (i === 5) renderBRows();
+    else if (i === 8) renderDebts();
+    else if (initFns[i]) initFns[i]();
+  }
+}
+
+// ── BOOT ──
+calcM();
+</script>
+</body>
+</html>
