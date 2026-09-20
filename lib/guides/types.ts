@@ -1,0 +1,31 @@
+import type { CalculatorSlug } from '@/lib/calculators/catalog';
+import type { SourceKey } from '@/lib/sources';
+export const guideCategories = ['Home & Mortgage', 'Saving & Investing', 'Retirement', 'Income & Budgeting', 'Debt', 'Financial Basics'] as const;
+export type GuideSection = {
+  id: string;
+  heading: string;
+  body: string;
+  sources?: SourceKey[];
+  exhibits?: string[];
+  tone?: 'year-specific' | 'distinction';
+};
+export type GuideContent = {
+  slug: string;
+  title: string;
+  seoTitle: string;
+  description: string;
+  summary: string;
+  intro: string;
+  takeaway: string;
+  category: typeof guideCategories[number];
+  relatedCalculator: CalculatorSlug;
+  calculatorAssociations: CalculatorSlug[];
+  reviewedAt: string;
+  relatedGuides: string[];
+  ogHeadline: string;
+  ogSubheadline: string;
+  fixtureIds: string[];
+  sections: GuideSection[];
+  exercise: string;
+};
+export type GuideDefinition = GuideContent & { href: `/guides/${string}`; readingTime: number; sourceIds: SourceKey[] };

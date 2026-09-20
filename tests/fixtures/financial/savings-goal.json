@@ -1,0 +1,220 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "G1",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 50000,
+          "alreadySaved": 5000,
+          "annualReturnPercent": 4,
+          "years": 4
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 849.39079221,
+        "series.last.value": 50000,
+        "interestEarned": 4229.24197395,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G2",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 12000,
+          "alreadySaved": 3000,
+          "annualReturnPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 750,
+        "series.last.value": 12000,
+        "interestEarned": 0,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G3",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 100000,
+          "alreadySaved": 10000,
+          "annualReturnPercent": 6,
+          "years": 10
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 499.18451747,
+        "series.last.value": 100000,
+        "interestEarned": 30097.85790302,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G4",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 10000,
+          "alreadySaved": 10000,
+          "annualReturnPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 0,
+        "series.last.value": 10000,
+        "interestEarned": 0,
+        "alreadyThere": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G5",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 10000,
+          "alreadySaved": 12000,
+          "annualReturnPercent": 5,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 0,
+        "series.last.value": 12613.94277458,
+        "interestEarned": 613.94277458,
+        "alreadyThere": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G6",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 10000,
+          "alreadySaved": 9000,
+          "annualReturnPercent": 12,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 0,
+        "series.last.value": 10141.42527119,
+        "interestEarned": 1141.42527119,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G7",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 100000000,
+          "alreadySaved": 0,
+          "annualReturnPercent": 0,
+          "years": 50
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 166666.66666667,
+        "series.last.value": 100000000,
+        "interestEarned": 0,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G8",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 1000000,
+          "alreadySaved": 0,
+          "annualReturnPercent": 40,
+          "years": 40
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 0.00486932,
+        "series.last.value": 1000000,
+        "interestEarned": 999997.66272792,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Solve future-value gap; actual uncapped balance"
+    },
+    {
+      "id": "G9",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 1000,
+          "alreadySaved": 0,
+          "annualReturnPercent": 0,
+          "years": 0
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Zero time cannot accept finite monthly solution"
+    },
+    {
+      "id": "G10",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 12000,
+          "alreadySaved": 0,
+          "annualReturnPercent": 0,
+          "years": 1.5
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 666.66666667,
+        "series.last.value": 12000
+      },
+      "tolerance": 0.01,
+      "rationale": "18 months should have matching terminal point"
+    },
+    {
+      "id": "G11",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 10000,
+          "alreadySaved": 1000,
+          "annualReturnPercent": -12,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 802.14802958,
+        "series.last.value": 10000,
+        "interestEarned": -625.7763549,
+        "alreadyThere": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Signed growth and same negative-rate model in chart"
+    }
+  ]
+}

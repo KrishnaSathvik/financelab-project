@@ -1,0 +1,292 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "D1",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 4200,
+              "rate": 19.9,
+              "minimumPayment": 120
+            },
+            {
+              "id": "1",
+              "name": "Debt 1",
+              "balance": 3500,
+              "rate": 12,
+              "minimumPayment": 110
+            },
+            {
+              "id": "2",
+              "name": "Debt 2",
+              "balance": 11000,
+              "rate": 6.5,
+              "minimumPayment": 265
+            }
+          ],
+          "monthlyBudget": 800,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 26,
+        "totalInterest": 2075.2295169
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D2",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 4200,
+              "rate": 19.9,
+              "minimumPayment": 120
+            },
+            {
+              "id": "1",
+              "name": "Debt 1",
+              "balance": 3500,
+              "rate": 12,
+              "minimumPayment": 110
+            },
+            {
+              "id": "2",
+              "name": "Debt 2",
+              "balance": 11000,
+              "rate": 6.5,
+              "minimumPayment": 265
+            }
+          ],
+          "monthlyBudget": 800,
+          "method": "avalanche"
+        }
+      ],
+      "expected": {
+        "months": 26,
+        "totalInterest": 1883.83962012
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D3",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 1000,
+              "rate": 12,
+              "minimumPayment": 100
+            }
+          ],
+          "monthlyBudget": 100,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 11,
+        "totalInterest": 58.98488001
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D4",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [],
+          "monthlyBudget": 0,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 0,
+        "totalInterest": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D5",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 100,
+              "rate": 0,
+              "minimumPayment": 10
+            },
+            {
+              "id": "1",
+              "name": "Debt 1",
+              "balance": 100,
+              "rate": 0,
+              "minimumPayment": 10
+            }
+          ],
+          "monthlyBudget": 200,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 1,
+        "totalInterest": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D6",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 100,
+              "rate": 0,
+              "minimumPayment": 60
+            },
+            {
+              "id": "1",
+              "name": "Debt 1",
+              "balance": 100,
+              "rate": 0,
+              "minimumPayment": 60
+            }
+          ],
+          "monthlyBudget": 100,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D7",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 100000000,
+              "rate": 20,
+              "minimumPayment": 2000000
+            }
+          ],
+          "monthlyBudget": 2000000,
+          "method": "avalanche"
+        }
+      ],
+      "expected": {
+        "months": 109,
+        "totalInterest": 116801925.53749579
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D8",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 600,
+              "rate": 0,
+              "minimumPayment": 1
+            }
+          ],
+          "monthlyBudget": 1,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 600,
+        "totalInterest": 0,
+        "budgetTooLow": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Full budget conserved; same-month leftover rolls forward"
+    },
+    {
+      "id": "D9",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "0",
+              "name": "Debt 0",
+              "balance": 100,
+              "rate": 0,
+              "minimumPayment": 10
+            }
+          ],
+          "monthlyBudget": 0
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Outstanding debt plus no payment is not zero-month payoff"
+    },
+    {
+      "id": "D10",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "a",
+              "name": "Card",
+              "balance": 10,
+              "rate": 0,
+              "minimumPayment": 10
+            },
+            {
+              "id": "b",
+              "name": "Card",
+              "balance": 20,
+              "rate": 0,
+              "minimumPayment": 20
+            }
+          ],
+          "monthlyBudget": 30
+        }
+      ],
+      "expected": {
+        "payoffOrder.length": 2
+      },
+      "tolerance": 0.01,
+      "rationale": "Distinct debt IDs with same name must both appear"
+    }
+  ]
+}

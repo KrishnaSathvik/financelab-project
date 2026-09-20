@@ -1,0 +1,320 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "V1",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 33600,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V2",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 400,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 33600,
+        "rentAtHorizon": 28800
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V3",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 6,
+          "monthlyRent": 800,
+          "appreciationPercent": 3,
+          "investmentReturnPercent": 5,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 5
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 1065.79681864,
+        "buyAtHorizon": 83983.95082508,
+        "rentAtHorizon": 48876.40875134
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V4",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 11
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 129600,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V5",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 100,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 0,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 0,
+        "buyAtHorizon": 120000,
+        "rentAtHorizon": 120000
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V6",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 0
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 24000,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V7",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 100000000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 100000,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 30
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 666666.66666667,
+        "buyAtHorizon": 123999999.99999999,
+        "rentAtHorizon": 87999999.99999999
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V8",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 1000,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 5,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 50
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 2536175.94858088,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "rationale": "Equal-budget cash flows; actual payment stops at payoff"
+    },
+    {
+      "id": "V9",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 110,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Down payment above price must reject"
+    },
+    {
+      "id": "V10",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 0,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 11
+        }
+      ],
+      "expected": {
+        "costRows.2.buy": 96000,
+        "rentAtHorizon": 120000
+      },
+      "tolerance": 0.01,
+      "rationale": "Mortgage spending stops after month 120; current costRows includes 105600"
+    },
+    {
+      "id": "V11",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 1000,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "buyAtHorizon": 36000,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "rationale": "Buyer invests 200 monthly under proposed equal-budget model"
+    }
+  ]
+}

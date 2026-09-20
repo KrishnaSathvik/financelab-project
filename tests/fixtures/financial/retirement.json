@@ -1,0 +1,243 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "R1",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 30,
+          "retirementAge": 65,
+          "currentSavings": 25000,
+          "monthlyContribution": 800,
+          "annualReturnPercent": 7,
+          "monthlyNeed": 4000
+        }
+      ],
+      "expected": {
+        "nestEgg": 1728497.47702178,
+        "safeAnnualWithdrawal": 69139.89908087
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R2",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 40,
+          "retirementAge": 60,
+          "currentSavings": 100000,
+          "monthlyContribution": 500,
+          "annualReturnPercent": 5,
+          "monthlyNeed": 3000
+        }
+      ],
+      "expected": {
+        "nestEgg": 476780.86280604,
+        "safeAnnualWithdrawal": 19071.23451224
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R3",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 60,
+          "retirementAge": 65,
+          "currentSavings": 100000,
+          "monthlyContribution": 1000,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1000
+        }
+      ],
+      "expected": {
+        "nestEgg": 160000,
+        "safeAnnualWithdrawal": 6400
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R4",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 65,
+          "currentSavings": 12000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1000
+        }
+      ],
+      "expected": {
+        "nestEgg": 12000,
+        "safeAnnualWithdrawal": 480
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R5",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 65,
+          "currentSavings": 0,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1000
+        }
+      ],
+      "expected": {
+        "nestEgg": 0,
+        "safeAnnualWithdrawal": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R6",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 30,
+          "retirementAge": 65,
+          "currentSavings": 0,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 0
+        }
+      ],
+      "expected": {
+        "nestEgg": 0,
+        "safeAnnualWithdrawal": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R7",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 20,
+          "retirementAge": 90,
+          "currentSavings": 1000000,
+          "monthlyContribution": 10000,
+          "annualReturnPercent": 15,
+          "monthlyNeed": 10000
+        }
+      ],
+      "expected": {
+        "nestEgg": 61248240543.60803,
+        "safeAnnualWithdrawal": 2449929621.7443213
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R8",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 65,
+          "currentSavings": 100000000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1
+        }
+      ],
+      "expected": {
+        "nestEgg": 100000000,
+        "safeAnnualWithdrawal": 4000000
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent end-month geometric series and withdrawal arithmetic"
+    },
+    {
+      "id": "R9",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 60,
+          "currentSavings": 100,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Impossible age order rejected"
+    },
+    {
+      "id": "R10",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 65,
+          "currentSavings": 12000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 1000
+        }
+      ],
+      "expected": {
+        "monthsFundsLast": 12
+      },
+      "tolerance": 0.01,
+      "rationale": "Exact depletion"
+    },
+    {
+      "id": "R11",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 65,
+          "retirementAge": 65,
+          "currentSavings": 1000000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 0,
+          "lifeExpectancy": 90
+        }
+      ],
+      "expected": {
+        "monthsFundsLast": "Infinity"
+      },
+      "tolerance": 0.01,
+      "rationale": "No withdrawals never deplete; current cap is not depletion"
+    },
+    {
+      "id": "R12",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 55,
+          "retirementAge": 65,
+          "currentSavings": 100000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 0,
+          "monthlyNeed": 300,
+          "inflationPercent": 10
+        }
+      ],
+      "expected": {
+        "exceedsTarget": false
+      },
+      "tolerance": 0.01,
+      "rationale": "Proposed today-dollar monthlyNeed: at retirement 300*1.1^10 exceeds 333.33; ignored inflation currently reports true"
+    }
+  ]
+}

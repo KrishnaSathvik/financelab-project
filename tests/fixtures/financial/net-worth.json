@@ -1,0 +1,192 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "N1",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 150000,
+          "debts": 80000,
+          "monthlySavings": 1500,
+          "monthlyDebtPaydown": 800,
+          "assetReturnPercent": 6,
+          "debtInterestPercent": 5,
+          "years": 30
+        }
+      ],
+      "expected": {
+        "current": 70000,
+        "series.last.netWorth": 2754958.61719175
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N2",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 10000,
+          "debts": 1000,
+          "monthlySavings": 100,
+          "monthlyDebtPaydown": 200,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "current": 9000,
+        "series.last.netWorth": 12600
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N3",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 357000,
+          "debts": 240000,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "current": 117000,
+        "series.last.netWorth": 117000
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N4",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 0,
+          "debts": 0,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 30
+        }
+      ],
+      "expected": {
+        "current": 0,
+        "series.last.netWorth": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N5",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 0,
+          "debts": 10000,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 30
+        }
+      ],
+      "expected": {
+        "current": -10000,
+        "series.last.netWorth": -10000
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N6",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 0,
+          "debts": 100,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 200,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "current": -100,
+        "series.last.netWorth": 2300
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N7",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 1000000000,
+          "debts": 100000000,
+          "monthlySavings": 10000,
+          "monthlyDebtPaydown": 5000,
+          "assetReturnPercent": 10,
+          "debtInterestPercent": 0,
+          "years": 30
+        }
+      ],
+      "expected": {
+        "current": 900000000,
+        "series.last.netWorth": 19761804252.54868
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N8",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 0,
+          "debts": 10000,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 30,
+          "years": 30
+        }
+      ],
+      "expected": {
+        "current": -10000,
+        "series.last.netWorth": -72542336.7462336
+      },
+      "tolerance": 0.01,
+      "rationale": "Separate assets/debt cash-flow conservation"
+    },
+    {
+      "id": "N9",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 100,
+          "debts": -100,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Reject negative liability; permit negative net worth"
+    }
+  ]
+}

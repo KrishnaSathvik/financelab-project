@@ -1,0 +1,219 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "I1",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 500,
+          "annualReturnPercent": 7,
+          "years": 20,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 300850.71840258,
+        "totalContributed": 130000,
+        "interestEarned": 170850.71840258
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I2",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 5,
+          "years": 10,
+          "compoundingFrequency": "annually"
+        }
+      ],
+      "expected": {
+        "finalValue": 16288.94626777,
+        "totalContributed": 10000,
+        "interestEarned": 6288.94626777
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I3",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 0,
+          "monthlyContribution": 100,
+          "annualReturnPercent": 12,
+          "years": 1,
+          "compoundingFrequency": "quarterly"
+        }
+      ],
+      "expected": {
+        "finalValue": 1267.55654033,
+        "totalContributed": 1200,
+        "interestEarned": 67.55654033
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I4",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 1000,
+          "monthlyContribution": 100,
+          "annualReturnPercent": 0,
+          "years": 1,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 2200,
+        "totalContributed": 2200,
+        "interestEarned": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I5",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 0,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 7,
+          "years": 20,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 0,
+        "totalContributed": 0,
+        "interestEarned": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I6",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 1000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": -12,
+          "years": 1,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 886.38487172,
+        "totalContributed": 1000,
+        "interestEarned": -113.61512828
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I7",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 100000000,
+          "monthlyContribution": 100000,
+          "annualReturnPercent": 15,
+          "years": 40,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 41971673945.00032,
+        "totalContributed": 148000000,
+        "interestEarned": 41823673945.00032
+      },
+      "tolerance": 0.01,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I8",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 1000,
+          "monthlyContribution": 1,
+          "annualReturnPercent": 40,
+          "years": 50,
+          "compoundingFrequency": "daily"
+        }
+      ],
+      "expected": {
+        "finalValue": 494046897142.02997,
+        "totalContributed": 1600,
+        "interestEarned": 494046895542.02997
+      },
+      "tolerance": 50,
+      "rationale": "Geometric-series oracle; losses stay signed"
+    },
+    {
+      "id": "I9",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 100,
+          "monthlyContribution": -5,
+          "annualReturnPercent": 5,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Negative deposit must reject or become explicit withdrawal mode"
+    },
+    {
+      "id": "I10",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 0,
+          "monthlyContribution": 100,
+          "annualReturnPercent": 0,
+          "years": 2,
+          "contributionIncreasePercent": 10,
+          "inflationPercent": 3
+        }
+      ],
+      "expected": {
+        "finalValue": 2520,
+        "realFutureValue": 2375.34169102
+      },
+      "tolerance": 0.01,
+      "rationale": "Step up after first year and deflate once"
+    },
+    {
+      "id": "I11",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 0,
+          "monthlyContribution": 100,
+          "annualReturnPercent": 0,
+          "years": 1.5
+        }
+      ],
+      "expected": {
+        "finalValue": 1800
+      },
+      "tolerance": 0.01,
+      "rationale": "Prevent fractional-year headline/chart mismatch or reject fractional years"
+    }
+  ]
+}

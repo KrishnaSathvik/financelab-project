@@ -1,0 +1,2393 @@
+{
+  "generatedBy": "scripts/generate-guide-fixtures.py",
+  "basis": "Python Decimal precision 50; independent inputs and arithmetic; no production imports.",
+  "values": {
+    "mortgage.payment": 2022.617675177484,
+    "mortgage.firstInterest": 1733.3333333333333,
+    "mortgage.firstPrincipal": 289.2843418441506,
+    "mortgage.totalInterest": 408142.3630638942,
+    "mortgage.totalCost": 2772.6176751774838,
+    "compound.lump": 16288.946267774414,
+    "compound.total": 300850.71840257855,
+    "compound.contributed": 130000.0,
+    "compound.growth": 170850.71840257852,
+    "compound.real": 166573.7484090483,
+    "compound.loss": 886.3848717161293,
+    "salary.taxableIncome": 58900.0,
+    "salary.federalTax": 7670.0,
+    "salary.socialSecurity": 4650.0,
+    "salary.medicare": 1087.5,
+    "salary.netAnnual": 61592.5,
+    "deductions.taxableIncome": 46900.0,
+    "deductions.federalTax": 5380.0,
+    "deductions.socialSecurity": 4526.0,
+    "deductions.medicare": 1058.5,
+    "deductions.netAnnual": 52035.5,
+    "debt.snowballInterest": 2075.2295168973315,
+    "debt.avalancheInterest": 1883.8396201185471,
+    "loan.300Interest": 2224.952581517938,
+    "loan.400Interest": 1564.8837029830004,
+    "loan.saved": 660.0688785349378,
+    "retirement.nest": 1728497.4770217773,
+    "retirement.need": 11255.449817486096,
+    "retirement.monthly": 5761.658256739258,
+    "savings.deposit": 849.3907922093823,
+    "savings.growth": 4229.241973949648,
+    "savings.new": 40770.75802605035,
+    "savings.growthFunded": 10141.425271187727,
+    "real.nominal": 19671.513572895652,
+    "real.value": 14637.453546399991,
+    "real.rate": 3.883495145631068,
+    "real.target": 13439.16379344122,
+    "apy.nominal5": 4.888948540377962,
+    "apy.effective12": 12.682503013196973
+  },
+  "cases": [
+    {
+      "id": "mortgage",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 400000,
+          "downPayment": 80000,
+          "annualRatePercent": 6.5,
+          "termYears": 30
+        }
+      ],
+      "expected": {
+        "monthlyPayment": 2022.617675177484,
+        "totalInterest": 408142.3630638942,
+        "months.0.interest": 1733.3333333333333,
+        "months.0.principal": 289.2843418441506,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "basis": "Payment = principal / sum of discounted monthly unit payments; interest uses opening balance \u00d7 note rate / 12.",
+      "sources": [
+        "mortgage",
+        "apr"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "compound-monthly",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 500,
+          "annualReturnPercent": 7,
+          "years": 20,
+          "compoundingFrequency": "monthly",
+          "inflationPercent": 3
+        }
+      ],
+      "expected": {
+        "finalValue": 300850.71840257855,
+        "totalContributed": 130000,
+        "interestEarned": 170850.71840257852,
+        "realFutureValue": 166573.7484090483
+      },
+      "tolerance": 0.01,
+      "basis": "End-month geometric sum at 7% nominal / 12; divide final value by 1.03^20 for today-dollar value.",
+      "sources": [
+        "compound",
+        "apy",
+        "inflation"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "compound-lump",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 5,
+          "years": 10,
+          "compoundingFrequency": "annually"
+        }
+      ],
+      "expected": {
+        "finalValue": 16288.946267774414
+      },
+      "tolerance": 0.01,
+      "basis": "10000 \u00d7 1.05^10; annual compounding.",
+      "sources": [
+        "compound"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "compound-zero",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 1000,
+          "monthlyContribution": 100,
+          "annualReturnPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "finalValue": 2200,
+        "interestEarned": 0
+      },
+      "tolerance": 0.01,
+      "basis": "Zero return: initial $1,000 plus twelve $100 month-end deposits.",
+      "sources": [
+        "compound"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "compound-loss",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 1000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": -12,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "finalValue": 886.3848717161293,
+        "interestEarned": -113.61512828387072
+      },
+      "tolerance": 0.01,
+      "basis": "1000 \u00d7 0.99^12; signed loss.",
+      "sources": [
+        "compound"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "salary-2026",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "taxableIncome": 58900.0,
+        "federalTax": 7670.0,
+        "socialSecurity": 4650.0,
+        "medicare": 1087.5,
+        "netAnnual": 61592.5
+      },
+      "tolerance": 0.01,
+      "basis": "2026 single standard deduction $16,100; bracket slices: $12,400 at 10%, $38,000 at 12%, $8,500 at 22%; FICA on $75,000.",
+      "sources": [
+        "irs2026",
+        "ssa",
+        "medicare"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "salary-deductions",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 10000,
+          "healthInsurance": 2000
+        }
+      ],
+      "expected": {
+        "taxableIncome": 46900.0,
+        "federalTax": 5380.0,
+        "socialSecurity": 4526.0,
+        "medicare": 1058.5,
+        "netAnnual": 52035.5
+      },
+      "tolerance": 0.01,
+      "basis": "Federal wages reduced by both deductions; FICA wages reduced only by qualifying $2,000 cafeteria benefit.",
+      "sources": [
+        "irs2026",
+        "ssa",
+        "retirementTax",
+        "cafeteria"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "salary-hourly",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "hourly",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0,
+          "hourlyRate": 30
+        }
+      ],
+      "expected": {
+        "annualSalary": 62400,
+        "hourlyRate": 30
+      },
+      "tolerance": 0.01,
+      "basis": "Gross hourly conversion: $30/hour \u00d7 40 hours/paid week \u00d7 52 paid weeks/year.",
+      "sources": [
+        "irs2026"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "salary-medicare",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 300000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "medicare": 5250
+      },
+      "tolerance": 0.01,
+      "basis": "300000 \u00d7 1.45% + (300000 \u2212 200000) \u00d7 0.9%.",
+      "sources": [
+        "medicare"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "net-worth",
+      "function": "calculateNetWorth",
+      "args": [
+        {
+          "assets": 357000,
+          "debts": 240000,
+          "monthlySavings": 0,
+          "monthlyDebtPaydown": 0,
+          "assetReturnPercent": 0,
+          "debtInterestPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "current": 117000,
+        "series.last.netWorth": 117000
+      },
+      "tolerance": 0.01,
+      "basis": "12000 cash + 45000 investments + 300000 full property value \u2212 240000 mortgage. Projection frozen at zero changes.",
+      "sources": [
+        "netWorth"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "budget-0",
+      "function": "calculateBudget",
+      "args": [
+        {
+          "monthlyIncome": 5000,
+          "categories": [
+            {
+              "name": "Housing",
+              "amount": 1500
+            },
+            {
+              "name": "Other expenses",
+              "amount": 2200
+            },
+            {
+              "name": "Savings transfer",
+              "amount": 0
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "expenses": 3700,
+        "surplus": 1300,
+        "remainingIncomeRate": 26.0
+      },
+      "tolerance": 0.01,
+      "basis": "Income minus all entered outflows, including explicit savings transfers; divide remainder by take-home income.",
+      "sources": [
+        "budget"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "budget-500",
+      "function": "calculateBudget",
+      "args": [
+        {
+          "monthlyIncome": 5000,
+          "categories": [
+            {
+              "name": "Housing",
+              "amount": 1500
+            },
+            {
+              "name": "Other expenses",
+              "amount": 2200
+            },
+            {
+              "name": "Savings transfer",
+              "amount": 500
+            }
+          ]
+        }
+      ],
+      "expected": {
+        "expenses": 4200,
+        "surplus": 800,
+        "remainingIncomeRate": 16.0
+      },
+      "tolerance": 0.01,
+      "basis": "Income minus all entered outflows, including explicit savings transfers; divide remainder by take-home income.",
+      "sources": [
+        "budget"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "debt-snowball",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "card",
+              "name": "Credit card",
+              "balance": 4200,
+              "rate": 19.9,
+              "minimumPayment": 120
+            },
+            {
+              "id": "personal",
+              "name": "Personal loan",
+              "balance": 3500,
+              "rate": 12,
+              "minimumPayment": 110
+            },
+            {
+              "id": "car",
+              "name": "Car loan",
+              "balance": 11000,
+              "rate": 6.5,
+              "minimumPayment": 265
+            }
+          ],
+          "monthlyBudget": 800,
+          "method": "snowball"
+        }
+      ],
+      "expected": {
+        "months": 26,
+        "totalInterest": 2075.2295168973315
+      },
+      "tolerance": 0.01,
+      "basis": "Decimal interest; minimums reserved across all debts; remaining budget assigned in fixed initial priority, including same-month payoff leftovers.",
+      "sources": [
+        "debt"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "debt-avalanche",
+      "function": "calculateDebtSnowball",
+      "args": [
+        {
+          "debts": [
+            {
+              "id": "card",
+              "name": "Credit card",
+              "balance": 4200,
+              "rate": 19.9,
+              "minimumPayment": 120
+            },
+            {
+              "id": "personal",
+              "name": "Personal loan",
+              "balance": 3500,
+              "rate": 12,
+              "minimumPayment": 110
+            },
+            {
+              "id": "car",
+              "name": "Car loan",
+              "balance": 11000,
+              "rate": 6.5,
+              "minimumPayment": 265
+            }
+          ],
+          "monthlyBudget": 800,
+          "method": "avalanche"
+        }
+      ],
+      "expected": {
+        "months": 26,
+        "totalInterest": 1883.8396201185471
+      },
+      "tolerance": 0.01,
+      "basis": "Decimal interest; minimums reserved across all debts; remaining budget assigned in fixed initial priority, including same-month payoff leftovers.",
+      "sources": [
+        "debt"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "loan-300",
+      "function": "simulateLoan",
+      "args": [
+        10000,
+        12,
+        300
+      ],
+      "expected": {
+        "months": 41,
+        "interest": 2224.952581517938,
+        "totalPaid": 12224.952581517939
+      },
+      "tolerance": 0.01,
+      "basis": "Monthly opening balance \u00d7 1%; cap last payment at balance plus interest.",
+      "sources": [
+        "mortgage"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "loan-400",
+      "function": "simulateLoan",
+      "args": [
+        10000,
+        12,
+        400
+      ],
+      "expected": {
+        "months": 29,
+        "interest": 1564.8837029830004,
+        "totalPaid": 11564.883702983001
+      },
+      "tolerance": 0.01,
+      "basis": "Monthly opening balance \u00d7 1%; cap last payment at balance plus interest.",
+      "sources": [
+        "mortgage"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "retirement",
+      "function": "calculateRetirement",
+      "args": [
+        {
+          "currentAge": 30,
+          "retirementAge": 65,
+          "currentSavings": 25000,
+          "monthlyContribution": 800,
+          "annualReturnPercent": 7,
+          "monthlyNeed": 4000,
+          "inflationPercent": 3,
+          "withdrawalRatePercent": 4,
+          "lifeExpectancy": 90
+        }
+      ],
+      "expected": {
+        "nestEgg": 1728497.4770217773,
+        "monthlyNeedAtRetirement": 11255.449817486096,
+        "safeMonthlyWithdrawal": 5761.658256739258,
+        "exceedsTarget": false
+      },
+      "tolerance": 0.01,
+      "basis": "Accumulation geometric sum, 420 end-month deposits; today-dollar need \u00d7 1.03^35; initial-rate arithmetic separate from spending.",
+      "sources": [
+        "bengen",
+        "trinity"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "rent-buy-1",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 33600,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "basis": "Zero-rate mortgage principal falls $800/month for 120 months; buyer invests freed $800 after payoff; renter keeps $24,000 initial portfolio.",
+      "sources": [
+        "housing"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "rent-buy-10",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 10
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 120000,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "basis": "Zero-rate mortgage principal falls $800/month for 120 months; buyer invests freed $800 after payoff; renter keeps $24,000 initial portfolio.",
+      "sources": [
+        "housing"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "rent-buy-11",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 800,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 11
+        }
+      ],
+      "expected": {
+        "monthlyMortgage": 800,
+        "buyAtHorizon": 129600,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "basis": "Zero-rate mortgage principal falls $800/month for 120 months; buyer invests freed $800 after payoff; renter keeps $24,000 initial portfolio.",
+      "sources": [
+        "housing"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "rent-buy-cheaper-owner",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 1000,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "buyAtHorizon": 36000,
+        "rentAtHorizon": 24000
+      },
+      "tolerance": 0.01,
+      "basis": "Buyer equity 33600 + 12 \u00d7 200 invested monthly cost difference.",
+      "sources": [
+        "housing"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "rent-buy-cheaper-renter",
+      "function": "calculateRentVsBuy",
+      "args": [
+        {
+          "homePrice": 120000,
+          "downPaymentPercent": 20,
+          "mortgageRatePercent": 0,
+          "monthlyRent": 400,
+          "appreciationPercent": 0,
+          "investmentReturnPercent": 0,
+          "rentIncreasePercent": 0,
+          "loanTermYears": 10,
+          "annualPropertyTax": 0,
+          "annualInsurance": 0,
+          "annualMaintenance": 0,
+          "closingCostPercent": 0,
+          "monthlyRenterInsurance": 0,
+          "yearsToStay": 1
+        }
+      ],
+      "expected": {
+        "buyAtHorizon": 33600,
+        "rentAtHorizon": 28800
+      },
+      "tolerance": 0.01,
+      "basis": "Renter portfolio 24000 + 12 \u00d7 400 invested monthly cost difference.",
+      "sources": [
+        "housing"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "savings-zero-1",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 12000,
+          "alreadySaved": 3000,
+          "annualReturnPercent": 0,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 750.0
+      },
+      "tolerance": 0.01,
+      "basis": "(12000 \u2212 3000) / number of months.",
+      "sources": [
+        "savings"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "savings-zero-2",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 12000,
+          "alreadySaved": 3000,
+          "annualReturnPercent": 0,
+          "years": 2
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 375.0
+      },
+      "tolerance": 0.01,
+      "basis": "(12000 \u2212 3000) / number of months.",
+      "sources": [
+        "savings"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "savings-zero-3",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 12000,
+          "alreadySaved": 3000,
+          "annualReturnPercent": 0,
+          "years": 3
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 250.0
+      },
+      "tolerance": 0.01,
+      "basis": "(12000 \u2212 3000) / number of months.",
+      "sources": [
+        "savings"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "savings-growth",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 50000,
+          "alreadySaved": 5000,
+          "annualReturnPercent": 4,
+          "years": 4
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 849.3907922093823,
+        "interestEarned": 4229.241973949648,
+        "series.last.value": 50000
+      },
+      "tolerance": 0.01,
+      "basis": "Future-value gap divided by end-month deposit geometric sum.",
+      "sources": [
+        "savings"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "savings-growth-funded",
+      "function": "calculateSavingsGoal",
+      "args": [
+        {
+          "goalAmount": 10000,
+          "alreadySaved": 9000,
+          "annualReturnPercent": 12,
+          "years": 1
+        }
+      ],
+      "expected": {
+        "monthlyRequired": 0,
+        "alreadyThere": false,
+        "series.last.value": 10141.425271187727
+      },
+      "tolerance": 0.01,
+      "basis": "9000 \u00d7 1.01^12 exceeds 10000; initial balance remains below target.",
+      "sources": [
+        "savings"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "nominal-real",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 7,
+          "years": 10,
+          "compoundingFrequency": "annually",
+          "inflationPercent": 3
+        }
+      ],
+      "expected": {
+        "finalValue": 19671.513572895652,
+        "realFutureValue": 14637.453546399991
+      },
+      "tolerance": 0.01,
+      "basis": "10000 \u00d7 1.07^10, deflated by 1.03^10.",
+      "sources": [
+        "inflation"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "apy-annual",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 5,
+          "years": 1,
+          "compoundingFrequency": "annually"
+        }
+      ],
+      "expected": {
+        "finalValue": 10500
+      },
+      "tolerance": 0.01,
+      "basis": "5% effective annual yield represented using annual frequency.",
+      "sources": [
+        "apy"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    },
+    {
+      "id": "apy-monthly-equivalent",
+      "function": "calculateInvestment",
+      "args": [
+        {
+          "startingAmount": 10000,
+          "monthlyContribution": 0,
+          "annualReturnPercent": 4.888948540377962,
+          "years": 1,
+          "compoundingFrequency": "monthly"
+        }
+      ],
+      "expected": {
+        "finalValue": 10500
+      },
+      "tolerance": 0.01,
+      "basis": "Nominal annual equivalent = 12 \u00d7 ((1.05)^(1/12) \u2212 1); percent input \u00d7 100.",
+      "sources": [
+        "apy"
+      ],
+      "relationship": "Independent arithmetic compared with frozen MoneyBasis v1 engine; sources support definitions, not these hypothetical amounts."
+    }
+  ],
+  "exhibits": {
+    "mortgage": {
+      "title": "How the payment mix changes",
+      "columns": [
+        "Year",
+        "Principal paid that year",
+        "Interest paid that year",
+        "Year-end loan balance"
+      ],
+      "rows": [
+        [
+          1,
+          3576.7215006719534,
+          20694.690601457853,
+          316423.27849932807
+        ],
+        [
+          5,
+          4635.504156653726,
+          19635.907945476083,
+          299555.1278130049
+        ],
+        [
+          10,
+          6410.055454251065,
+          17861.356647878743,
+          271283.60436164454
+        ],
+        [
+          20,
+          12257.203889839499,
+          12014.208212290308,
+          178128.9041598852
+        ],
+        [
+          30,
+          23438.026124635155,
+          833.3859774946532,
+          0.0
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money",
+        "money"
+      ],
+      "note": "$320,000 loan; 6.5% note rate; 360 end-of-month payments. Annual totals; excludes escrow and fees.",
+      "kind": "stacked",
+      "series": [
+        1,
+        2
+      ],
+      "caseIds": [
+        "mortgage"
+      ],
+      "inputs": [
+        [
+          {
+            "homePrice": 400000,
+            "downPayment": 80000,
+            "annualRatePercent": 6.5,
+            "termYears": 30
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "compound": {
+      "title": "Contributions, growth and total value",
+      "columns": [
+        "Year",
+        "Contributed capital",
+        "Accumulated growth",
+        "Total value"
+      ],
+      "rows": [
+        [
+          0,
+          10000.0,
+          0.0,
+          10000.0
+        ],
+        [
+          5,
+          40000.0,
+          9972.703420196007,
+          49972.703420196005
+        ],
+        [
+          10,
+          70000.0,
+          36639.017483724325,
+          106639.01748372432
+        ],
+        [
+          15,
+          100000.0,
+          86970.61566940144,
+          186970.61566940145
+        ],
+        [
+          20,
+          130000.0,
+          170850.71840257852,
+          300850.71840257855
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money",
+        "money"
+      ],
+      "note": "$10,000 initially + $500 at each month end; 7% nominal annual rate, monthly compounding; no fees or tax. Hypothetical, not a forecast.",
+      "kind": "line",
+      "series": [
+        1,
+        2,
+        3
+      ],
+      "caseIds": [
+        "compound-monthly"
+      ],
+      "inputs": [
+        [
+          {
+            "startingAmount": 10000,
+            "monthlyContribution": 500,
+            "annualReturnPercent": 7,
+            "years": 20,
+            "compoundingFrequency": "monthly",
+            "inflationPercent": 3
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "salary": {
+      "title": "2026 annual gross-to-net estimate",
+      "columns": [
+        "Step",
+        "Amount"
+      ],
+      "rows": [
+        [
+          "Gross wages",
+          75000
+        ],
+        [
+          "Federal income tax",
+          -7670.0
+        ],
+        [
+          "Social Security",
+          -4650.0
+        ],
+        [
+          "Medicare",
+          -1087.5
+        ],
+        [
+          "Estimated net",
+          61592.5
+        ]
+      ],
+      "formats": [
+        "text",
+        "money"
+      ],
+      "note": "Single worker, standard deduction, no pretax deductions. Excludes state/local taxes and other payroll deductions. The standard deduction reduces taxable income, not cash pay.",
+      "kind": "waterfall",
+      "series": [
+        1
+      ],
+      "caseIds": [
+        "salary-2026"
+      ],
+      "inputs": [
+        [
+          {
+            "mode": "salary",
+            "annualSalary": 75000,
+            "hoursPerWeek": 40,
+            "weeksPerYear": 52,
+            "filingStatus": "single",
+            "taxYear": 2026,
+            "traditional401k": 0,
+            "healthInsurance": 0
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "gross": {
+      "title": "Where the annual gross pay goes \u2014 2026",
+      "columns": [
+        "Allocation",
+        "Amount"
+      ],
+      "rows": [
+        [
+          "Traditional 401(k)",
+          10000
+        ],
+        [
+          "Qualifying health benefit",
+          2000
+        ],
+        [
+          "Federal income tax",
+          5380.0
+        ],
+        [
+          "Social Security",
+          4526.0
+        ],
+        [
+          "Medicare",
+          1058.5
+        ],
+        [
+          "Estimated net",
+          52035.5
+        ]
+      ],
+      "formats": [
+        "text",
+        "money"
+      ],
+      "note": "$75,000 gross wages; single worker. Each dollar is allocated once. The 401(k) transfer remains an asset; the health benefit is not spendable pay.",
+      "kind": "bars",
+      "series": [
+        1
+      ],
+      "caseIds": [
+        "salary-deductions"
+      ],
+      "inputs": [
+        [
+          {
+            "mode": "salary",
+            "annualSalary": 75000,
+            "hoursPerWeek": 40,
+            "weeksPerYear": 52,
+            "filingStatus": "single",
+            "taxYear": 2026,
+            "traditional401k": 10000,
+            "healthInsurance": 2000
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "pay-periods": {
+      "title": "One gross salary, different pay periods",
+      "columns": [
+        "Period",
+        "Gross amount"
+      ],
+      "rows": [
+        [
+          "Annual",
+          62400
+        ],
+        [
+          "Monthly average",
+          5200
+        ],
+        [
+          "Biweekly (26)",
+          2400
+        ],
+        [
+          "Semimonthly (24)",
+          2600
+        ],
+        [
+          "Paid week (52)",
+          1200
+        ],
+        [
+          "Hour (40 hours \u00d7 52 weeks)",
+          30
+        ]
+      ],
+      "formats": [
+        "text",
+        "money"
+      ],
+      "note": "$62,400 gross; 40 hours per paid week; 52 paid weeks. Semimonthly is a manual comparison, not a calculator output.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "salary-hourly"
+      ],
+      "inputs": [
+        [
+          {
+            "mode": "hourly",
+            "annualSalary": 75000,
+            "hoursPerWeek": 40,
+            "weeksPerYear": 52,
+            "filingStatus": "single",
+            "taxYear": 2026,
+            "traditional401k": 0,
+            "healthInsurance": 0,
+            "hourlyRate": 30
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "net-worth": {
+      "title": "A dated balance sheet",
+      "columns": [
+        "Measure",
+        "Amount"
+      ],
+      "rows": [
+        [
+          "Assets",
+          357000
+        ],
+        [
+          "Liabilities",
+          240000
+        ],
+        [
+          "Net worth",
+          117000
+        ]
+      ],
+      "formats": [
+        "text",
+        "money"
+      ],
+      "note": "Assets: cash $12,000, investments $45,000, full property value $300,000. Mortgage: $240,000.",
+      "kind": "bars",
+      "series": [
+        1
+      ],
+      "caseIds": [
+        "net-worth"
+      ],
+      "inputs": [
+        [
+          {
+            "assets": 357000,
+            "debts": 240000,
+            "monthlySavings": 0,
+            "monthlyDebtPaydown": 0,
+            "assetReturnPercent": 0,
+            "debtInterestPercent": 0,
+            "years": 1
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "budget": {
+      "title": "Assigning the same monthly income",
+      "columns": [
+        "Allocation",
+        "Before savings transfer",
+        "After savings transfer"
+      ],
+      "rows": [
+        [
+          "Expenses",
+          3700,
+          3700
+        ],
+        [
+          "Savings transfer",
+          0,
+          500
+        ],
+        [
+          "Unassigned cash",
+          1300,
+          800
+        ],
+        [
+          "Income reconciled",
+          5000,
+          5000
+        ]
+      ],
+      "formats": [
+        "text",
+        "money",
+        "money"
+      ],
+      "note": "All amounts monthly. $500 moved to savings reduces unassigned cash; it does not create a second $500 of remaining cash.",
+      "kind": "allocation",
+      "series": [
+        2
+      ],
+      "caseIds": [
+        "budget-0",
+        "budget-500"
+      ],
+      "inputs": [
+        [
+          {
+            "monthlyIncome": 5000,
+            "categories": [
+              {
+                "name": "Housing",
+                "amount": 1500
+              },
+              {
+                "name": "Other expenses",
+                "amount": 2200
+              },
+              {
+                "name": "Savings transfer",
+                "amount": 0
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "monthlyIncome": 5000,
+            "categories": [
+              {
+                "name": "Housing",
+                "amount": 1500
+              },
+              {
+                "name": "Other expenses",
+                "amount": 2200
+              },
+              {
+                "name": "Savings transfer",
+                "amount": 500
+              }
+            ]
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "savings-rate": {
+      "title": "Several definitions, explicit denominators",
+      "columns": [
+        "Scenario",
+        "Savings numerator",
+        "Income denominator",
+        "Rate (%)"
+      ],
+      "rows": [
+        [
+          "Unassigned cash only (not savings)",
+          0,
+          5000,
+          0
+        ],
+        [
+          "$500 transfer / take-home",
+          500,
+          5000,
+          10
+        ],
+        [
+          "$400 payroll + $500 after-tax / gross",
+          900,
+          8000,
+          11.25
+        ],
+        [
+          "Plus $200 employer / gross plus employer",
+          1100,
+          8200,
+          13.414634146341463
+        ]
+      ],
+      "formats": [
+        "text",
+        "money",
+        "money",
+        "percent"
+      ],
+      "note": "The last two rows are separate illustrative compensation scenarios. An $800 remainder on $5,000 is a 16% remaining-income rate, not part of these savings numerators.",
+      "kind": "bars",
+      "series": [
+        3
+      ],
+      "caseIds": [],
+      "inputs": {
+        "takeHome": 5000,
+        "expenses": 3700,
+        "transfer": 500,
+        "separateGrossScenario": {
+          "grossPay": 8000,
+          "employeeRetirement": 400,
+          "afterTaxSaving": 500,
+          "employerRetirement": 200
+        }
+      },
+      "basis": "Explicit savings numerator / named income denominator \u00d7 100; employer-inclusive illustration adds employer contribution to both.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Standalone policy illustration; not simulated by a calculator."
+    },
+    "debt-snowball": {
+      "title": "Snowball: payment priority and payoff",
+      "columns": [
+        "Debt",
+        "Priority",
+        "First-month payment",
+        "Cleared in month"
+      ],
+      "rows": [
+        [
+          "Personal loan",
+          1,
+          415.0,
+          9
+        ],
+        [
+          "Credit card",
+          2,
+          120.0,
+          17
+        ],
+        [
+          "Car loan",
+          3,
+          265.0,
+          26
+        ]
+      ],
+      "formats": [
+        "text",
+        "number",
+        "money",
+        "number"
+      ],
+      "note": "Priority describes where extra money goes; payoff month is a chronological outcome. Fixed $800 total monthly budget.",
+      "kind": "sequence",
+      "series": [
+        3
+      ],
+      "caseIds": [
+        "debt-snowball"
+      ],
+      "inputs": [
+        [
+          {
+            "debts": [
+              {
+                "id": "card",
+                "name": "Credit card",
+                "balance": 4200,
+                "rate": 19.9,
+                "minimumPayment": 120
+              },
+              {
+                "id": "personal",
+                "name": "Personal loan",
+                "balance": 3500,
+                "rate": 12,
+                "minimumPayment": 110
+              },
+              {
+                "id": "car",
+                "name": "Car loan",
+                "balance": 11000,
+                "rate": 6.5,
+                "minimumPayment": 265
+              }
+            ],
+            "monthlyBudget": 800,
+            "method": "snowball"
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "debt-avalanche": {
+      "title": "Avalanche: payment priority and payoff",
+      "columns": [
+        "Debt",
+        "Priority",
+        "First-month payment",
+        "Cleared in month"
+      ],
+      "rows": [
+        [
+          "Credit card",
+          1,
+          425.0,
+          11
+        ],
+        [
+          "Personal loan",
+          2,
+          110.0,
+          16
+        ],
+        [
+          "Car loan",
+          3,
+          265.0,
+          26
+        ]
+      ],
+      "formats": [
+        "text",
+        "number",
+        "money",
+        "number"
+      ],
+      "note": "Priority describes where extra money goes; payoff month is a chronological outcome. Fixed $800 total monthly budget.",
+      "kind": "sequence",
+      "series": [
+        3
+      ],
+      "caseIds": [
+        "debt-avalanche"
+      ],
+      "inputs": [
+        [
+          {
+            "debts": [
+              {
+                "id": "card",
+                "name": "Credit card",
+                "balance": 4200,
+                "rate": 19.9,
+                "minimumPayment": 120
+              },
+              {
+                "id": "personal",
+                "name": "Personal loan",
+                "balance": 3500,
+                "rate": 12,
+                "minimumPayment": 110
+              },
+              {
+                "id": "car",
+                "name": "Car loan",
+                "balance": 11000,
+                "rate": 6.5,
+                "minimumPayment": 265
+              }
+            ],
+            "monthlyBudget": 800,
+            "method": "avalanche"
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "debt": {
+      "title": "Same debts and budget, different priority",
+      "columns": [
+        "Method",
+        "Payoff months",
+        "Total interest"
+      ],
+      "rows": [
+        [
+          "Snowball",
+          26,
+          2075.2295168973315
+        ],
+        [
+          "Avalanche",
+          26,
+          1883.8396201185471
+        ]
+      ],
+      "formats": [
+        "text",
+        "number",
+        "money"
+      ],
+      "note": "Credit card $4,200 at 19.9%, minimum $120; personal loan $3,500 at 12%, minimum $110; car loan $11,000 at 6.5%, minimum $265. $800 monthly budget.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "debt-snowball",
+        "debt-avalanche"
+      ],
+      "inputs": [
+        [
+          {
+            "debts": [
+              {
+                "id": "card",
+                "name": "Credit card",
+                "balance": 4200,
+                "rate": 19.9,
+                "minimumPayment": 120
+              },
+              {
+                "id": "personal",
+                "name": "Personal loan",
+                "balance": 3500,
+                "rate": 12,
+                "minimumPayment": 110
+              },
+              {
+                "id": "car",
+                "name": "Car loan",
+                "balance": 11000,
+                "rate": 6.5,
+                "minimumPayment": 265
+              }
+            ],
+            "monthlyBudget": 800,
+            "method": "snowball"
+          }
+        ],
+        [
+          {
+            "debts": [
+              {
+                "id": "card",
+                "name": "Credit card",
+                "balance": 4200,
+                "rate": 19.9,
+                "minimumPayment": 120
+              },
+              {
+                "id": "personal",
+                "name": "Personal loan",
+                "balance": 3500,
+                "rate": 12,
+                "minimumPayment": 110
+              },
+              {
+                "id": "car",
+                "name": "Car loan",
+                "balance": 11000,
+                "rate": 6.5,
+                "minimumPayment": 265
+              }
+            ],
+            "monthlyBudget": 800,
+            "method": "avalanche"
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "loan-ledger-300": {
+      "title": "First payments at $300 per month",
+      "columns": [
+        "Month",
+        "Payment",
+        "Interest",
+        "Principal",
+        "Closing balance"
+      ],
+      "rows": [
+        [
+          1,
+          300.0,
+          100.0,
+          200.0,
+          9800.0
+        ],
+        [
+          2,
+          300.0,
+          98.0,
+          202.0,
+          9598.0
+        ],
+        [
+          41,
+          224.9525815179383,
+          2.227253282355825,
+          222.7253282355825,
+          0.0
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money",
+        "money",
+        "money"
+      ],
+      "note": "Interest before payment; last row is the final partial payment.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "loan-300"
+      ],
+      "inputs": [
+        [
+          10000,
+          12,
+          300
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "loan-ledger-400": {
+      "title": "First payments at $400 per month",
+      "columns": [
+        "Month",
+        "Payment",
+        "Interest",
+        "Principal",
+        "Closing balance"
+      ],
+      "rows": [
+        [
+          1,
+          400.0,
+          100.0,
+          300.0,
+          9700.0
+        ],
+        [
+          2,
+          400.0,
+          97.0,
+          303.0,
+          9397.0
+        ],
+        [
+          29,
+          364.8837029830005,
+          3.6127099305247574,
+          361.2709930524757,
+          0.0
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money",
+        "money",
+        "money"
+      ],
+      "note": "Interest before payment; last row is the final partial payment.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "loan-400"
+      ],
+      "inputs": [
+        [
+          10000,
+          12,
+          400
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "loan-comparison": {
+      "title": "Payoff comparison",
+      "columns": [
+        "Monthly payment",
+        "Months",
+        "Total interest",
+        "Final payment"
+      ],
+      "rows": [
+        [
+          300,
+          41,
+          2224.952581517938,
+          224.9525815179383
+        ],
+        [
+          400,
+          29,
+          1564.8837029830004,
+          364.8837029830005
+        ]
+      ],
+      "formats": [
+        "money",
+        "number",
+        "money",
+        "money"
+      ],
+      "note": "$10,000 starting debt; 12% nominal annual rate / 12; no fees or missed payments.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "loan-300",
+        "loan-400"
+      ],
+      "inputs": [
+        [
+          10000,
+          12,
+          300
+        ],
+        [
+          10000,
+          12,
+          400
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "loan": {
+      "title": "The balance with $300 or $400 monthly",
+      "columns": [
+        "Month",
+        "$300 payment",
+        "$400 payment"
+      ],
+      "rows": [
+        [
+          0,
+          10000.0,
+          10000.0
+        ],
+        [
+          1,
+          9800.0,
+          9700.0
+        ],
+        [
+          2,
+          9598.0,
+          9397.0
+        ],
+        [
+          6,
+          8769.59698798,
+          8154.39548197
+        ],
+        [
+          12,
+          7463.499397360605,
+          6195.249096040909
+        ],
+        [
+          18,
+          6077.050486266703,
+          4115.575729400054
+        ],
+        [
+          24,
+          4605.30702936171,
+          1907.960544042566
+        ],
+        [
+          29,
+          3309.9224686553334,
+          0.0
+        ],
+        [
+          36,
+          1384.6243281683899,
+          0.0
+        ],
+        [
+          41,
+          0.0,
+          0.0
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money"
+      ],
+      "note": "Balances after payment, with zero retained after payoff. Lines join selected monthly observations.",
+      "kind": "line",
+      "series": [
+        1,
+        2
+      ],
+      "caseIds": [
+        "loan-300",
+        "loan-400"
+      ],
+      "inputs": [
+        [
+          10000,
+          12,
+          300
+        ],
+        [
+          10000,
+          12,
+          400
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "retirement-rates": {
+      "title": "First-year arithmetic on $750,000",
+      "columns": [
+        "Initial rate (%)",
+        "Annual withdrawal",
+        "Monthly equivalent"
+      ],
+      "rows": [
+        [
+          3,
+          22500.0,
+          1875.0
+        ],
+        [
+          4,
+          30000.0,
+          2500.0
+        ],
+        [
+          5,
+          37500.0,
+          3125.0
+        ]
+      ],
+      "formats": [
+        "percent",
+        "money",
+        "money"
+      ],
+      "note": "Illustrations, not recommended rates or probabilities of lasting through retirement.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [],
+      "inputs": {
+        "initialPortfolio": 750000,
+        "initialRatesPercent": [
+          3,
+          4,
+          5
+        ]
+      },
+      "basis": "Annual = initial portfolio \u00d7 initial rate; monthly equivalent = annual / 12.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Standalone policy illustration; not simulated by a calculator."
+    },
+    "retirement": {
+      "title": "Fixed initial 4%, then inflation adjustment",
+      "columns": [
+        "Retirement year",
+        "Annual withdrawal",
+        "Monthly equivalent"
+      ],
+      "rows": [
+        [
+          1,
+          30000.0,
+          2500.0
+        ],
+        [
+          2,
+          30900.0,
+          2575.0
+        ],
+        [
+          3,
+          31827.0,
+          2652.25
+        ],
+        [
+          10,
+          39143.195514877334,
+          3261.9329595731115
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money"
+      ],
+      "note": "Initial portfolio $750,000. Spending rises 3% annually regardless of subsequent portfolio value. No tax or fees; no survival claim.",
+      "kind": "timeline",
+      "series": [
+        1
+      ],
+      "caseIds": [],
+      "inputs": {
+        "initialPortfolio": 750000,
+        "initialRatePercent": 4,
+        "inflationPercent": 3,
+        "years": [
+          1,
+          2,
+          3,
+          10
+        ]
+      },
+      "basis": "Annual withdrawal = 750000 \u00d7 .04 \u00d7 1.03^(year\u22121). This is a spending policy only, not a portfolio survival calculation.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Standalone policy illustration; not simulated by a calculator."
+    },
+    "sequence": {
+      "title": "Same returns, different withdrawal outcomes",
+      "columns": [
+        "Year",
+        "+20% then \u221220%",
+        "\u221220% then +20%"
+      ],
+      "rows": [
+        [
+          0,
+          100000,
+          100000
+        ],
+        [
+          1,
+          110000,
+          70000
+        ],
+        [
+          2,
+          78000,
+          74000
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money"
+      ],
+      "note": "$100,000 initially; $10,000 withdrawn at each year end, after that year\u2019s return. No inflation, taxes or fees. Without withdrawals both sequences end at $96,000. Invented two-year paths, not study data.",
+      "kind": "line",
+      "series": [
+        1,
+        2
+      ],
+      "caseIds": [],
+      "inputs": {
+        "initialPortfolio": 100000,
+        "yearEndWithdrawal": 10000,
+        "annualReturnPaths": [
+          [
+            20,
+            -20
+          ],
+          [
+            -20,
+            20
+          ]
+        ],
+        "inflation": 0,
+        "fees": 0,
+        "tax": 0
+      },
+      "basis": "Apply each annual return to opening assets, then subtract $10,000; no production engine represents varying-return paths.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Standalone policy illustration; not simulated by a calculator."
+    },
+    "rent-buy": {
+      "title": "Equal resources through mortgage payoff",
+      "columns": [
+        "Year",
+        "Buyer equity",
+        "Owner portfolio",
+        "Buyer net position",
+        "Renter portfolio"
+      ],
+      "rows": [
+        [
+          0,
+          24000,
+          0,
+          24000,
+          24000
+        ],
+        [
+          1,
+          33600,
+          0,
+          33600,
+          24000
+        ],
+        [
+          10,
+          120000,
+          0,
+          120000,
+          24000
+        ],
+        [
+          11,
+          120000,
+          9600,
+          129600,
+          24000
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money",
+        "money",
+        "money"
+      ],
+      "note": "$120,000 property; $24,000 down; 10-year zero-rate mortgage; $800 monthly rent. All other costs, growth and returns set to zero to isolate bookkeeping. Not a realistic market-cost estimate.",
+      "kind": "paths",
+      "series": [
+        3,
+        4
+      ],
+      "caseIds": [
+        "rent-buy-1",
+        "rent-buy-10",
+        "rent-buy-11"
+      ],
+      "inputs": [
+        [
+          {
+            "homePrice": 120000,
+            "downPaymentPercent": 20,
+            "mortgageRatePercent": 0,
+            "monthlyRent": 800,
+            "appreciationPercent": 0,
+            "investmentReturnPercent": 0,
+            "rentIncreasePercent": 0,
+            "loanTermYears": 10,
+            "annualPropertyTax": 0,
+            "annualInsurance": 0,
+            "annualMaintenance": 0,
+            "closingCostPercent": 0,
+            "monthlyRenterInsurance": 0,
+            "yearsToStay": 1
+          }
+        ],
+        [
+          {
+            "homePrice": 120000,
+            "downPaymentPercent": 20,
+            "mortgageRatePercent": 0,
+            "monthlyRent": 800,
+            "appreciationPercent": 0,
+            "investmentReturnPercent": 0,
+            "rentIncreasePercent": 0,
+            "loanTermYears": 10,
+            "annualPropertyTax": 0,
+            "annualInsurance": 0,
+            "annualMaintenance": 0,
+            "closingCostPercent": 0,
+            "monthlyRenterInsurance": 0,
+            "yearsToStay": 10
+          }
+        ],
+        [
+          {
+            "homePrice": 120000,
+            "downPaymentPercent": 20,
+            "mortgageRatePercent": 0,
+            "monthlyRent": 800,
+            "appreciationPercent": 0,
+            "investmentReturnPercent": 0,
+            "rentIncreasePercent": 0,
+            "loanTermYears": 10,
+            "annualPropertyTax": 0,
+            "annualInsurance": 0,
+            "annualMaintenance": 0,
+            "closingCostPercent": 0,
+            "monthlyRenterInsurance": 0,
+            "yearsToStay": 11
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "savings": {
+      "title": "What makes up the $50,000 goal",
+      "columns": [
+        "Component",
+        "Amount"
+      ],
+      "rows": [
+        [
+          "Existing savings",
+          5000
+        ],
+        [
+          "New deposits",
+          40770.75802605035
+        ],
+        [
+          "Assumed growth",
+          4229.241973949648
+        ],
+        [
+          "Goal",
+          50000
+        ]
+      ],
+      "formats": [
+        "text",
+        "money"
+      ],
+      "note": "48 month-end deposits at unrounded solved amount; 4% nominal annual return / 12. Rounding the actual monthly transfer to cents may slightly change the terminal balance.",
+      "kind": "bars",
+      "series": [
+        1
+      ],
+      "caseIds": [
+        "savings-growth"
+      ],
+      "inputs": [
+        [
+          {
+            "goalAmount": 50000,
+            "alreadySaved": 5000,
+            "annualReturnPercent": 4,
+            "years": 4
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "savings-zero": {
+      "title": "Time changes the zero-return deposit",
+      "columns": [
+        "Months",
+        "Monthly deposit"
+      ],
+      "rows": [
+        [
+          12,
+          750
+        ],
+        [
+          24,
+          375
+        ],
+        [
+          36,
+          250
+        ]
+      ],
+      "formats": [
+        "number",
+        "money"
+      ],
+      "note": "$12,000 nominal goal; $3,000 already saved; no return or inflation adjustment.",
+      "kind": "table",
+      "series": [],
+      "caseIds": [
+        "savings-zero-1",
+        "savings-zero-2",
+        "savings-zero-3"
+      ],
+      "inputs": [
+        [
+          {
+            "goalAmount": 12000,
+            "alreadySaved": 3000,
+            "annualReturnPercent": 0,
+            "years": 1
+          }
+        ],
+        [
+          {
+            "goalAmount": 12000,
+            "alreadySaved": 3000,
+            "annualReturnPercent": 0,
+            "years": 2
+          }
+        ],
+        [
+          {
+            "goalAmount": 12000,
+            "alreadySaved": 3000,
+            "annualReturnPercent": 0,
+            "years": 3
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "real": {
+      "title": "Future dollars and today\u2019s purchasing power",
+      "columns": [
+        "Year",
+        "Nominal value",
+        "Today-dollar value"
+      ],
+      "rows": [
+        [
+          0,
+          10000.0,
+          10000.0
+        ],
+        [
+          2,
+          11449.0,
+          10791.780563672353
+        ],
+        [
+          4,
+          13107.9601,
+          11646.252773445638
+        ],
+        [
+          6,
+          15007.30351849,
+          12568.38043200859
+        ],
+        [
+          8,
+          17181.8617983192,
+          13563.520366299022
+        ],
+        [
+          10,
+          19671.513572895652,
+          14637.453546399991
+        ]
+      ],
+      "formats": [
+        "number",
+        "money",
+        "money"
+      ],
+      "note": "$10,000 initial; 7% annual compounding; no deposits; constant 3% inflation assumption. No tax or fees.",
+      "kind": "line",
+      "series": [
+        1,
+        2
+      ],
+      "caseIds": [
+        "nominal-real"
+      ],
+      "inputs": [
+        [
+          {
+            "startingAmount": 10000,
+            "monthlyContribution": 0,
+            "annualReturnPercent": 7,
+            "years": 10,
+            "compoundingFrequency": "annually",
+            "inflationPercent": 3
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    },
+    "apy": {
+      "title": "Rates expressed on a comparable annual basis",
+      "columns": [
+        "Description",
+        "Nominal annual rate (%)",
+        "Compounds/year",
+        "Effective annual yield (%)"
+      ],
+      "rows": [
+        [
+          "12% nominal, monthly",
+          12,
+          12,
+          12.682503013196973
+        ],
+        [
+          "5% APY, monthly equivalent",
+          4.888948540377962,
+          12,
+          5
+        ],
+        [
+          "5% nominal, annual",
+          5,
+          1,
+          5
+        ]
+      ],
+      "formats": [
+        "text",
+        "percent",
+        "number",
+        "percent"
+      ],
+      "note": "Fixed rates, interest retained, no fees or withdrawals. Yield conversion is arithmetic; it does not turn uncertain investment returns into a deposit promise.",
+      "kind": "bars",
+      "series": [
+        3
+      ],
+      "caseIds": [
+        "apy-annual",
+        "apy-monthly-equivalent"
+      ],
+      "inputs": [
+        [
+          {
+            "startingAmount": 10000,
+            "monthlyContribution": 0,
+            "annualReturnPercent": 5,
+            "years": 1,
+            "compoundingFrequency": "annually"
+          }
+        ],
+        [
+          {
+            "startingAmount": 10000,
+            "monthlyContribution": 0,
+            "annualReturnPercent": 4.888948540377962,
+            "years": 1,
+            "compoundingFrequency": "monthly"
+          }
+        ]
+      ],
+      "basis": "Independent Decimal reference arithmetic in the linked cases; selected rows and components retain full precision.",
+      "relationship": "MoneyBasis educational arithmetic, not source-provided market observations. Compare linked cases with the frozen calculator; renderer and prose consume these same fixtures."
+    }
+  }
+}

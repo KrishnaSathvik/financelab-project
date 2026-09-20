@@ -1,0 +1,224 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "M1",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 400000,
+          "downPayment": 80000,
+          "annualRatePercent": 6.5,
+          "termYears": 30
+        }
+      ],
+      "expected": {
+        "loanAmount": 320000,
+        "monthlyPayment": 2022.61767518,
+        "totalInterest": 408142.36306389,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M2",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 300000,
+          "downPayment": 60000,
+          "annualRatePercent": 5,
+          "termYears": 15
+        }
+      ],
+      "expected": {
+        "loanAmount": 240000,
+        "monthlyPayment": 1897.90470418,
+        "totalInterest": 101622.84675235,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M3",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 300000,
+          "downPayment": 0,
+          "annualRatePercent": 7,
+          "termYears": 20
+        }
+      ],
+      "expected": {
+        "loanAmount": 300000,
+        "monthlyPayment": 2325.89680686,
+        "totalInterest": 258215.23364559,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M4",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 1200,
+          "downPayment": 0,
+          "annualRatePercent": 0,
+          "termYears": 10
+        }
+      ],
+      "expected": {
+        "loanAmount": 1200,
+        "monthlyPayment": 10,
+        "totalInterest": 0,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M5",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 100,
+          "downPayment": 100,
+          "annualRatePercent": 0,
+          "termYears": 10
+        }
+      ],
+      "expected": {
+        "status": "no-loan",
+        "loanAmount": 0,
+        "monthlyPayment": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles",
+      "auditExpected": {
+        "loanAmount": null
+      },
+      "policyDecision": "Intentional contract change: valid all-cash purchase now returns an explicit no-loan result, as recommended by the audit."
+    },
+    {
+      "id": "M6",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 100,
+          "downPayment": 99.99,
+          "annualRatePercent": 5,
+          "termYears": 10
+        }
+      ],
+      "expected": {
+        "loanAmount": 0.01,
+        "monthlyPayment": 0.00010607,
+        "totalInterest": 0.00272786,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M7",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 100000000,
+          "downPayment": 0,
+          "annualRatePercent": 12,
+          "termYears": 30
+        }
+      ],
+      "expected": {
+        "loanAmount": 100000000,
+        "monthlyPayment": 1028612.5969255,
+        "totalInterest": 270300534.89318156,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M8",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 1000,
+          "downPayment": 0,
+          "annualRatePercent": 1e-06,
+          "termYears": 30
+        }
+      ],
+      "expected": {
+        "loanAmount": 1000,
+        "monthlyPayment": 2.7777782,
+        "totalInterest": 0.00015042,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent present-value payment; schedule reconciles"
+    },
+    {
+      "id": "M9",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 100,
+          "downPayment": -10,
+          "annualRatePercent": 5,
+          "termYears": 10
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Negative down payment must be rejected"
+    },
+    {
+      "id": "M10",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 400000,
+          "downPayment": 80000,
+          "annualRatePercent": 6.5,
+          "termYears": 30,
+          "annualPropertyTax": 4800,
+          "annualInsurance": 2400,
+          "monthlyHoa": 100,
+          "monthlyPmi": 50
+        }
+      ],
+      "expected": {
+        "estimatedMonthlyCost": 2772.61767518
+      },
+      "tolerance": 0.01,
+      "rationale": "Fees separate from principal and interest"
+    },
+    {
+      "id": "M11",
+      "function": "calculateMortgage",
+      "args": [
+        {
+          "homePrice": 1200,
+          "downPayment": 0,
+          "annualRatePercent": 0,
+          "termYears": 1.5
+        }
+      ],
+      "expected": {
+        "months.length": 18,
+        "months.last.balance": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "If fractional years are accepted, generate all 18 months"
+    }
+  ]
+}

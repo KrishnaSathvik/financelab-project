@@ -1,0 +1,172 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "L1",
+      "function": "simulateLoan",
+      "args": [
+        25000,
+        8,
+        500
+      ],
+      "expected": {
+        "months": 62,
+        "interest": 5511.17334448,
+        "totalPaid": 30511.17334448
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L2",
+      "function": "simulateLoan",
+      "args": [
+        10000,
+        12,
+        300
+      ],
+      "expected": {
+        "months": 41,
+        "interest": 2224.95258152,
+        "totalPaid": 12224.95258152
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L3",
+      "function": "simulateLoan",
+      "args": [
+        10000,
+        12,
+        400
+      ],
+      "expected": {
+        "months": 29,
+        "interest": 1564.88370298,
+        "totalPaid": 11564.88370298
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L4",
+      "function": "simulateLoan",
+      "args": [
+        1000,
+        0,
+        300
+      ],
+      "expected": {
+        "months": 4,
+        "interest": 0,
+        "totalPaid": 1000
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L5",
+      "function": "simulateLoan",
+      "args": [
+        1000,
+        12,
+        10
+      ],
+      "expected": {
+        "months": "Infinity"
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L6",
+      "function": "simulateLoan",
+      "args": [
+        0,
+        12,
+        100
+      ],
+      "expected": {
+        "months": 0,
+        "interest": 0,
+        "totalPaid": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L7",
+      "function": "simulateLoan",
+      "args": [
+        100000000,
+        20,
+        2000000
+      ],
+      "expected": {
+        "months": 109,
+        "interest": 116801925.53749579,
+        "totalPaid": 216801925.5374958
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment"
+    },
+    {
+      "id": "L8",
+      "function": "simulateLoan",
+      "args": [
+        1201,
+        0,
+        1
+      ],
+      "expected": {
+        "status": "horizon-exceeded",
+        "months": "Infinity",
+        "elapsedMonths": 1200,
+        "remaining": 1
+      },
+      "tolerance": 0.01,
+      "rationale": "Decimal monthly ledger incl capped final payment",
+      "auditExpected": {
+        "months": 1201,
+        "interest": 0,
+        "totalPaid": 1201
+      },
+      "policyDecision": "Independent reference pays in month 1201. The bounded engine stops at 1200 and reports horizon-exceeded with $1 remaining rather than a false payoff date."
+    },
+    {
+      "id": "L9",
+      "function": "simulateLoan",
+      "args": [
+        -100,
+        12,
+        100
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Reject negative principal"
+    },
+    {
+      "id": "L10",
+      "function": "simulateLoan",
+      "args": [
+        1000,
+        12,
+        100,
+        {
+          "oneTimeExtra": 500,
+          "startMonth": 1
+        }
+      ],
+      "expected": {
+        "months": 6,
+        "interest": 20.81361954,
+        "totalPaid": 1020.81361954
+      },
+      "tolerance": 0.01,
+      "rationale": "Interest then one-time principal payment"
+    }
+  ]
+}

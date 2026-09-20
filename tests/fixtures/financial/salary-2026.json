@@ -1,0 +1,1264 @@
+{
+  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "cases": [
+    {
+      "id": "S1",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 7670,
+        "socialSecurity": 4650,
+        "medicare": 1087.5,
+        "netAnnual": 61592.5,
+        "taxableIncome": 58900
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S2",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 150000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 15340,
+        "socialSecurity": 9300,
+        "medicare": 2175,
+        "netAnnual": 123185,
+        "taxableIncome": 117800
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S3",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 100000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 9588,
+        "socialSecurity": 6200,
+        "medicare": 1450,
+        "netAnnual": 82762,
+        "taxableIncome": 75850
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S4",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 0,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 0,
+        "socialSecurity": 0,
+        "medicare": 0,
+        "netAnnual": 0,
+        "taxableIncome": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S5",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 16100,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 0,
+        "socialSecurity": 998.2,
+        "medicare": 233.45,
+        "netAnnual": 14868.35,
+        "taxableIncome": 0
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S6",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 184500,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 33014,
+        "socialSecurity": 11439,
+        "medicare": 2675.25,
+        "netAnnual": 137371.75,
+        "taxableIncome": 168400
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S7",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 1000000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 320000.25,
+        "socialSecurity": 11439,
+        "medicare": 21700,
+        "netAnnual": 646860.75,
+        "taxableIncome": 983900
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S8",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 1000000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 280250.5,
+        "socialSecurity": 11439,
+        "medicare": 21250,
+        "netAnnual": 687060.5,
+        "taxableIncome": 967800
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S9",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 10000,
+          "healthInsurance": 2000
+        }
+      ],
+      "expected": {
+        "federalTax": 5380,
+        "socialSecurity": 4526,
+        "medicare": 1058.5,
+        "netAnnual": 52035.5,
+        "taxableIncome": 46900
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S10",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 300000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single",
+          "taxYear": 2026,
+          "traditional401k": 0,
+          "healthInsurance": 0
+        }
+      ],
+      "expected": {
+        "federalTax": 68134.25,
+        "socialSecurity": 11439,
+        "medicare": 5250,
+        "netAnnual": 215176.75,
+        "taxableIncome": 283900
+      },
+      "tolerance": 0.01,
+      "rationale": "Independent IRS bracket slices, SSA cap and Additional Medicare liability"
+    },
+    {
+      "id": "S11",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 75000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 0,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "error": true
+      },
+      "tolerance": 0.01,
+      "rationale": "Zero paid weeks cannot define weekly pay"
+    },
+    {
+      "id": "S12",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "hourly",
+          "hourlyRate": 30,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "annualSalary": 62400,
+        "hourlyRate": 30
+      },
+      "tolerance": 0.01,
+      "rationale": "Gross conversion exact"
+    },
+    {
+      "id": "SB-single-0--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 28499.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 1239.999
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-0-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 28500,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 1240
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-0-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 28500.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 1240.0012
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-1--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 66499.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 5799.9988
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-1-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 66500,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 5800
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-1-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 66500.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 5800.0022
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-2--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 121799.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 17965.9978
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-2-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 121800,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 17966
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-2-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 121800.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 17966.0024
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-3--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 217874.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 41023.9976
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-3-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 217875,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 41024
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-3-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 217875.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 41024.0032
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-4--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 272324.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 58447.9968
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-4-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 272325,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 58448
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-4-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 272325.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 58448.0035
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-5--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 656699.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 192979.2465
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-5-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 656700,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 192979.25
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-single-5-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 656700.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "single"
+        }
+      ],
+      "expected": {
+        "federalTax": 192979.2537
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-0--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 56999.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 2479.999
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-0-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 57000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 2480
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-0-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 57000.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 2480.0012
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-1--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 132999.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 11599.9988
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-1-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 133000,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 11600
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-1-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 133000.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 11600.0022
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-2--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 243599.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 35931.9978
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-2-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 243600,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 35932
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-2-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 243600.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 35932.0024
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-3--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 435749.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 82047.9976
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-3-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 435750,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 82048
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-3-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 435750.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 82048.0032
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-4--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 544649.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 116895.9968
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-4-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 544650,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 116896
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-4-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 544650.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 116896.0035
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-5--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 800899.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 206583.4965
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-5-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 800900,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 206583.5
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-mfj-5-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 800900.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "mfj"
+        }
+      ],
+      "expected": {
+        "federalTax": 206583.5037
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-0--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 41849.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 1769.999
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-0-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 41850,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 1770
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-0-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 41850.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 1770.0012
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-1--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 91599.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 7739.9988
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-1-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 91600,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 7740
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-1-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 91600.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 7740.0022
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-2--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 129849.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 16154.9978
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-2-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 129850,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 16155
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-2-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 129850.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 16155.0024
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-3--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 225899.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 39206.9976
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-3-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 225900,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 39207
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-3-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 225900.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 39207.0032
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-4--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 280349.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 56630.9968
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-4-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 280350,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 56631
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-4-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 280350.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 56631.0035
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-5--0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 664749.99,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 191170.9965
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-5-0",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 664750,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 191171
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    },
+    {
+      "id": "SB-hoh-5-0.01",
+      "function": "calculateSalary",
+      "args": [
+        {
+          "mode": "salary",
+          "annualSalary": 664750.01,
+          "hoursPerWeek": 40,
+          "weeksPerYear": 52,
+          "filingStatus": "hoh"
+        }
+      ],
+      "expected": {
+        "federalTax": 191171.0037
+      },
+      "tolerance": 1e-06,
+      "rationale": "Every supported bracket boundary"
+    }
+  ]
+}
