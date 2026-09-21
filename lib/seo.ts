@@ -171,6 +171,8 @@ export function llmsTxt() {
     "",
     "No account is required for standard calculator use.",
     "",
+    "Google Analytics 4 may record page views. Calculator inputs are not sent with those page views.",
+    "",
     "## Sources",
     "",
     `${SITE_NAME} prioritizes authoritative and primary sources for changing financial information such as tax brackets and government limits.`,

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Geist_Mono, Inter } from "next/font/google";
+import { SiteAnalytics } from "@/components/analytics/google-analytics";
 import { SiteShell } from "@/components/layout/site-shell";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ThemeProvider } from "@/components/theme/theme-provider";
@@ -86,6 +87,7 @@ export default function RootLayout({
           <SiteShell>{children}</SiteShell>
         </ThemeProvider>
       </body>
+      <SiteAnalytics />
     </html>
   );
 }

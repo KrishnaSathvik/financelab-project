@@ -26,8 +26,8 @@ const localItems = [
 const activity = [
   {
     title: "Analytics",
-    body: "No analytics SDK is currently installed.",
-    status: "Not used",
+    body: "Google Analytics 4 records page views and basic site usage, such as which pages are opened. Calculator inputs are not sent to Google Analytics.",
+    status: "Used",
   },
   {
     title: "Advertising cookies",
@@ -71,6 +71,7 @@ export default function PrivacyPage() {
             <h3>What is sent</h3>
             <p>For standard calculator use:</p>
             <p><strong className="font-semibold text-foreground">Your calculator values are not sent to a MoneyBasis server.</strong></p>
+            <p className="secondary-note">Page views are sent to Google Analytics. Those requests do not include calculator numbers.</p>
           </div>
         </div>
       </TrustSection>
@@ -103,7 +104,7 @@ export default function PrivacyPage() {
             </div>
           ))}
         </div>
-        <p className="secondary-note">The site does not claim “no tracking.” None of those are used today to reconstruct your financial situation.</p>
+        <p className="secondary-note">The site does not claim “no tracking.” Page-view analytics do not include your calculator numbers.</p>
       </TrustSection>
       <TrustSection title="Data stored on this device" description="Control the optional calculator records saved in this browser.">
         <ClearSavedData />

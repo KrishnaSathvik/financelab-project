@@ -1,10 +1,10 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { calculatorList, calculatorSlugs, relatedCalculators } from "@/lib/calculators/catalog";
 import { calculatorPageCopy } from "@/lib/calculators/page-copy";
 import { calculatorJsonLd, calculatorManifest, llmsTxt, organizationJsonLd } from "@/lib/seo";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { GA_MEASUREMENT_ID, SITE_NAME, SITE_URL } from "@/lib/site";
 import sitemap from "@/app/sitemap";
 import robots from "@/app/robots";
 
@@ -86,9 +86,21 @@ describe("machine-readable SEO files", () => {
     expect(organizationJsonLd().logo).toBe(`${SITE_URL}/logo.png`);
   });
 
+  it("documents Google Analytics 4 without claiming no SDK is installed", () => {
+    expect(GA_MEASUREMENT_ID).toBe("G-5S6MBPSWG6");
+    expect(llmsTxt()).toContain("Google Analytics 4 may record page views");
+    expect(llmsTxt()).toContain("Calculator inputs are not sent with those page views");
+  });
+
   it("ships a 1200x630 Open Graph image for every calculator", () => {
     for (const slug of calculatorSlugs) {
       expect(existsSync(join(process.cwd(), "public", "og", `${slug}.png`))).toBe(true);
     }
+  });
+
+  it("serves the Google Search Console HTML verification file at the site root", () => {
+    const path = join(process.cwd(), "public", "google4ab21dcd5cd8bd84.html");
+    expect(existsSync(path)).toBe(true);
+    expect(readFileSync(path, "utf8")).toBe("google-site-verification: google4ab21dcd5cd8bd84.html");
   });
 });

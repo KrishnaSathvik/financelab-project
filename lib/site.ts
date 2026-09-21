@@ -19,6 +19,7 @@ export const SITE_PRIVACY_LINE =
   "Standard calculator inputs are processed locally in your browser. No account is required.";
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://moneybasis.app";
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-5S6MBPSWG6";
 export const GITHUB_URL =
   "https://github.com/KrishnaSathvik/financelab-project";
 export const AUTHOR_NAME = "Krishna Sathvik";

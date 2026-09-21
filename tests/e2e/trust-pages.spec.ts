@@ -28,6 +28,8 @@ test('privacy states local processing, share distinction and confirmed clear', a
   await page.goto('/privacy');
   await expect(page.locator('.trust-summary')).toContainText('Calculations run in your browser');
   await expect(page.locator('.trust-summary')).toContainText('Calculator values are not sent to a MoneyBasis server');
+  await expect(page.getByText('Google Analytics 4 records page views', { exact: false })).toBeVisible();
+  await expect(page.getByText('No analytics SDK is currently installed.')).toHaveCount(0);
   await expect(page.getByText('Budget · Net Worth · Debt Snowball', { exact: true })).toBeVisible();
   await expect(page.getByText('Calculator-only link', { exact: true })).toBeVisible();
   await expect(page.getByText('Include my numbers', { exact: true })).toBeVisible();
