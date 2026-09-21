@@ -9,7 +9,7 @@ export function MethodologyExplorer({ initialSlug = "mortgage" }: { initialSlug?
   const [slug, setSlug] = useState(initialSlug);
   const c = calculatorList.find((x) => x.slug === slug)!;
   return (
-    <div className="how-it-works site-container-reference pb-16">
+    <div className="how-it-works site-container pb-16">
       <PageHero eyebrow="Formulas and assumptions" title="How MoneyBasis calculates results" description="Explore the formulas, assumptions and sources behind each estimate. Your inputs provide the starting point; the calculation runs in your browser." illustration={<InformationIllustration topic="how-it-works" />} />
       <div className="explanation-layout">
       <nav aria-label="Calculator explanations" className="explanation-nav">

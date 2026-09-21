@@ -19,7 +19,7 @@ export function PageHero({
       className={`page-hero ${illustration ? "page-hero-split" : "page-hero-plain"}`}
     >
       <div className="page-hero-copy">
-        {eyebrow ? <p className="mb-5 text-sm text-muted">{eyebrow}</p> : null}
+        {eyebrow ? <p className="mb-3 text-sm text-muted">{eyebrow}</p> : null}
         <h1 className="page-hero-title">{title}</h1>
         <p className="page-hero-lede">{description}</p>
         {children ? <div className="page-hero-actions">{children}</div> : null}

@@ -5,7 +5,7 @@ Implementation record for the 2026-09-18 audit. Scope: correctness and the suppo
 | Ticket | Acceptance criteria | Implementation |
 |---|---|---|
 | MB-C01 Shared validation | One result contract across typed inputs, engines, URL restoration and saved records; bad data cannot render success | `lib/validation/`, `lib/calculation-result.ts`, strict decimal parser, validated persistence/hooks |
-| MB-C02 Time and conventions | Whole-month horizons including fractional years; clamped calendar dates; explicit rates, contributions, rounding and dollar basis | `lib/calendar.ts`, `lib/finance.ts`, `MONEYBASIS_CALCULATION_CONVENTIONS.md` |
+| MB-C02 Time and conventions | Whole-month horizons including fractional years; clamped calendar dates; explicit rates, contributions, rounding and dollar basis | `lib/calendar.ts`, `lib/finance.ts`, `docs/MONEYBASIS_CALCULATION_CONVENTIONS.md` |
 | MB-C03 Debt conservation | Minimum-budget rejection, capped payments, same-month rollover, independent IDs, exact horizon boundary | Debt monthly allocation ledger; regression cases D1–D10 and conservation tests |
 | MB-C04 Housing comparison | Equal starting resources and monthly resource budget, investments on either side, correct time-zero equity, no post-payoff mortgage spending | Rent/buy monthly ledger and selected-horizon reconciliation |
 | MB-C05 Retirement semantics | Today-dollar spending inflated to retirement and annually thereafter; nominal charts; losses retained; depletion distinguished from horizon | Unified monthly drawdown, explicit status and purchasing-power display |
@@ -19,7 +19,7 @@ Implementation record for the 2026-09-18 audit. Scope: correctness and the suppo
 
 ## Fixture policy decisions
 
-All 160 reference cases originate in `TEST_MATRIX.md`; that audit document is preserved unchanged. M5 and L8 have explicit `auditExpected` and `policyDecision` fields in their fixture JSON. All-cash mortgage output is now a valid no-loan result. The 1,201-month loan fixture is intentionally bounded at 1,200 months and reports its $1 residual and `horizon-exceeded`. No claim is made that these model-policy changes received separate human signoff.
+All 160 reference cases originate in `docs/TEST_MATRIX.md`; that audit document is preserved unchanged. M5 and L8 have explicit `auditExpected` and `policyDecision` fields in their fixture JSON. All-cash mortgage output is now a valid no-loan result. The 1,201-month loan fixture is intentionally bounded at 1,200 months and reports its $1 residual and `horizon-exceeded`. No claim is made that these model-policy changes received separate human signoff.
 
 ## Reproduction
 

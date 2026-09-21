@@ -26,3 +26,16 @@ for (const route of ['/', '/calculators', '/guides', '/how-it-works', '/about', 
     if (route === '/privacy') await hero.screenshot({ path: 'output/playwright/shared-hero-privacy-dark.png', style: 'header.sticky { visibility: hidden; }' });
   });
 }
+
+test('navigating to another page opens at the top instead of scrolling from the previous position', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 800 });
+  await page.goto('/guides/apr-vs-apy');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.locator('footer').scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(400);
+  await page.getByRole('navigation', { name: 'Footer' }).getByRole('link', { name: 'About' }).click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  expect(await page.evaluate(() => window.scrollY)).toBeLessThan(8);
+});
+

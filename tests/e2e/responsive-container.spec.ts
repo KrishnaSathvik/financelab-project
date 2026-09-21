@@ -89,19 +89,22 @@ test.describe("responsive container pass v1", () => {
       await page.goto("/guides/apr-vs-apy");
       const article = await widthOf(page, ".guide-page");
       const prose = await page.locator(".guide-prose").first().boundingBox();
-      expect(article).toBeGreaterThanOrEqual(1080);
-      expect(article).toBeLessThanOrEqual(1160);
+      expect(Math.abs(article - directory)).toBeLessThanOrEqual(2);
       expect(prose!.width).toBeLessThanOrEqual(780);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
       await page.screenshot({ path: `${out}/guide-article-${width}.png`, fullPage: true });
 
       await page.goto("/how-it-works");
-      const reference = await widthOf(page, ".site-container-reference");
-      expect(reference).toBeGreaterThanOrEqual(1080);
-      expect(reference).toBeLessThanOrEqual(1280);
-      expect(reference).toBeLessThan(directory - 40);
+      const howItWorks = await widthOf(page, ".how-it-works");
+      expect(Math.abs(howItWorks - directory)).toBeLessThanOrEqual(2);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
       await page.screenshot({ path: `${out}/how-it-works-${width}.png`, fullPage: true });
+
+      await page.goto("/about");
+      const about = await widthOf(page, ".trust-page");
+      expect(Math.abs(about - directory)).toBeLessThanOrEqual(2);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+      await page.screenshot({ path: `${out}/about-${width}.png`, fullPage: true });
     }
   });
 });

@@ -44,7 +44,7 @@ Budget remaining cash flow is income minus entered categories. Its remaining-inc
 
 ## Independent fixture reconciliation
 
-All 160 cases were transcribed from `TEST_MATRIX.md`, whose independent Python Decimal calculations did not import production code. Numeric literals retain the audit's reported precision and tolerances. Financial count assertions are exact. Two contract changes preserve the original expectations alongside their rationale in JSON:
+All 160 cases were transcribed from `docs/TEST_MATRIX.md`, whose independent Python Decimal calculations did not import production code. Numeric literals retain the audit's reported precision and tolerances. Financial count assertions are exact. Two contract changes preserve the original expectations alongside their rationale in JSON:
 
 - M5: original `null` becomes explicit `no-loan`, balance/payment zero.
 - L8: independent payoff is month 1,201. Our bounded model reports `horizon-exceeded`, 1,200 elapsed months and $1 remaining instead of claiming payoff at 1,200.

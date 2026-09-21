@@ -20,7 +20,7 @@ for (const guide of guideList) test(`${guide.slug}: desktop and mobile content, 
   const imageBuffer=await imageResponse.body();
   expect(imageBuffer.readUInt32BE(16)).toBe(1200);expect(imageBuffer.readUInt32BE(20)).toBe(630);
   const shell=await page.locator('.guide-page').boundingBox();
-  expect(shell!.width).toBeGreaterThanOrEqual(1100);expect(shell!.width).toBeLessThanOrEqual(1260);
+  expect(shell!.width).toBeGreaterThanOrEqual(1280);expect(shell!.width).toBeLessThanOrEqual(1490);
   const prose = page.locator(".guide-prose").first();
   expect((await prose.boundingBox())!.width).toBeLessThanOrEqual(780);
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toHaveCount(1);

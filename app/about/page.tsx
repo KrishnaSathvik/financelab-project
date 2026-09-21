@@ -52,17 +52,17 @@ const isNotItems = [
 export default function AboutPage() {
   return (
     <TrustPage
-      title={
-        <>
-          Money decisions are easier
-          <span className="block">when the numbers are clear.</span>
-        </>
-      }
+      eyebrow="About"
+      title="Money decisions are easier when the numbers are clear."
       description="MoneyBasis makes everyday financial calculations understandable. Start with your numbers, explore a scenario, and see what creates the result."
       actions={
         <>
-          <Link href="/calculators" className="trust-button">Explore calculators</Link>
-          <Link href="/how-it-works" className="trust-button-secondary">See how MoneyBasis works</Link>
+          <Link href="/calculators" className="text-[17px] font-semibold text-foreground">
+            Explore calculators →
+          </Link>
+          <Link href="/how-it-works" className="text-[17px] font-medium text-muted">
+            How it works →
+          </Link>
         </>
       }
     >

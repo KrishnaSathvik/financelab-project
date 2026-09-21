@@ -47,18 +47,21 @@ for (const width of widths) {
     await expect(page.locator('#methodology-panel h2')).toHaveText('Compound Interest Calculator');
     await expect(page.locator('#methodology-panel').getByRole('link', { name: /Open/ })).toHaveAttribute('href', '/calculators/compound-interest');
     if (width >= 1024) {
+      const header = await page.locator("header.sticky").boundingBox();
       const hero = await page.locator('[data-page-hero]').boundingBox();
+      const first = await page.locator("[data-page-hero] .page-hero-copy > :first-child").boundingBox();
       const panel = await page.locator('#methodology-panel').boundingBox();
       const sidebar = await nav.boundingBox();
+      expect(first!.y - (header!.y + header!.height)).toBeLessThanOrEqual(40);
       expect(panel!.y - (hero!.y + hero!.height)).toBeLessThanOrEqual(1);
       expect(panel!.y).toBe(sidebar!.y);
       expect(sidebar!.width).toBe(230);
-      expect(hero!.height).toBeLessThan(500);
     }
     if (width >= 768) await nav.getByRole('button', { name: 'Mortgage', exact: true }).click();
     else await select.selectOption('mortgage');
     await page.evaluate(() => scrollTo(0, 0));
-    expect(await page.locator('.detail-content').evaluate(node => node.clientWidth)).toBeLessThanOrEqual(800);
+    const panelWidth = await page.locator('#methodology-panel').evaluate((node) => node.clientWidth);
+    expect(await page.locator('.detail-content').evaluate((node) => node.clientWidth)).toBeLessThanOrEqual(panelWidth + 1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     if ([1440, 1280, 1024, 768, 390].includes(width)) await page.screenshot({ path: `output/playwright/final-ui/how-it-works-${width}.png`, fullPage: true });
   });

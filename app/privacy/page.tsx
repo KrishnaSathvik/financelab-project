@@ -44,7 +44,6 @@ const activity = [
 export default function PrivacyPage() {
   return (
     <TrustPage
-      eyebrow="Trust & transparency"
       title="Privacy"
       description={`${SITE_NAME} is designed so standard calculator inputs stay on the device you are using. No account is required for standard calculator use.`}
       aside={
@@ -109,7 +108,7 @@ export default function PrivacyPage() {
       <TrustSection title="Data stored on this device" description="Control the optional calculator records saved in this browser.">
         <ClearSavedData />
         <p className="mt-6">
-          <Link href="/sources" className="trust-text-link">Review MoneyBasis sources →</Link>
+          <Link href="/sources" className="text-[17px] font-semibold text-foreground">Review MoneyBasis sources →</Link>
         </p>
       </TrustSection>
     </TrustPage>

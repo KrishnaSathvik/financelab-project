@@ -12,7 +12,9 @@ test('about uses principle cards, is/isn\'t comparison and calculator CTA', asyn
   await expect(page.getByRole('heading', { name: 'Private by default' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'MoneyBasis is', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: "MoneyBasis isn't", exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Explore calculators' }).first()).toHaveAttribute('href', '/calculators');
+  await expect(page.getByText('Trust & transparency')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Explore calculators →' }).first()).toHaveAttribute('href', '/calculators');
+  await expect(page.getByRole('link', { name: 'How it works →' }).first()).toHaveAttribute('href', '/how-it-works');
   await expect(page.getByRole('link', { name: 'Read our privacy approach →' })).toHaveAttribute('href', '/privacy');
   const columns = await page.locator('.principle-card').evaluateAll((nodes) => new Set(nodes.map((node) => Math.round(node.getBoundingClientRect().x))).size);
   expect(columns).toBe(3);
@@ -26,6 +28,7 @@ test('about uses principle cards, is/isn\'t comparison and calculator CTA', asyn
 test('privacy states local processing, share distinction and confirmed clear', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/privacy');
+  await expect(page.getByText('Trust & transparency')).toHaveCount(0);
   await expect(page.locator('.trust-summary')).toContainText('Calculations run in your browser');
   await expect(page.locator('.trust-summary')).toContainText('Calculator values are not sent to a MoneyBasis server');
   await expect(page.getByText('Google Analytics 4 records page views', { exact: false })).toBeVisible();
@@ -50,6 +53,7 @@ test('privacy states local processing, share distinction and confirmed clear', a
 test('disclaimer keeps limitation sections and inspection links', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/disclaimer');
+  await expect(page.getByText('Trust & transparency')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'Educational estimates' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'What MoneyBasis does not provide' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Before making an important decision' })).toBeVisible();
@@ -63,6 +67,12 @@ test('disclaimer keeps limitation sections and inspection links', async ({ page 
 test('sources renders every registry item with category navigation', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/sources');
+  await expect(page.getByText('Trust & transparency')).toHaveCount(0);
+  await expect(page.locator('.trust-chip')).toHaveText([
+    'Primary sources preferred',
+    'Year-specific tax data',
+    'Reviewed references',
+  ]);
   const nav = page.getByRole('navigation', { name: 'Source categories' });
   await expect(nav).toBeVisible();
   await expect(page.getByLabel('Source category')).toBeHidden();

@@ -20,7 +20,6 @@ const exclusions = [
 export default function DisclaimerPage() {
   return (
     <TrustPage
-      eyebrow="Trust & transparency"
       title="Financial disclaimer"
       description={`${SITE_NAME} helps you inspect estimates based on your inputs. It is educational software, not personalized financial advice.`}
       aside={
@@ -50,8 +49,8 @@ export default function DisclaimerPage() {
       <div className="trust-cta">
         <h2>Want to inspect the numbers?</h2>
         <div className="trust-cta-links">
-          <Link href="/how-it-works" className="trust-text-link">See how MoneyBasis calculates estimates →</Link>
-          <Link href="/sources" className="trust-text-link">Review sources →</Link>
+          <Link href="/how-it-works" className="text-[17px] font-semibold text-foreground">See how MoneyBasis calculates estimates →</Link>
+          <Link href="/sources" className="text-[17px] font-medium text-muted">Review sources →</Link>
         </div>
       </div>
     </TrustPage>

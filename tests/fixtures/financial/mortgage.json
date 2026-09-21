@@ -1,5 +1,5 @@
 {
-  "provenance": "Transcribed from TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
+  "provenance": "Transcribed from docs/TEST_MATRIX.md independent Decimal reference audit dated 2026-09-18. Expectations are not computed by production code.",
   "cases": [
     {
       "id": "M1",

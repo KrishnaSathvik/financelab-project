@@ -47,6 +47,10 @@ Set `NEXT_PUBLIC_GA_ID` to the Google Analytics 4 measurement ID (`G-5S6MBPSWG6`
 
 Standard calculator inputs are processed locally in the browser. No account is required. Optional on-device saves stay in `localStorage` until you clear them. Google Analytics 4 records page views; calculator numbers are not sent with those requests.
 
+## Docs
+
+Audits, visual passes and calculation conventions live in [`docs/`](docs/).
+
 ## License
 
 MIT

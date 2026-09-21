@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { PageHero } from "@/components/layout/page-hero";
 
 export function TrustPage({
   eyebrow,
@@ -10,21 +11,18 @@ export function TrustPage({
   children,
 }: {
   eyebrow?: string;
-  title: ReactNode;
-  description: ReactNode;
+  title: string;
+  description: string;
   actions?: ReactNode;
   aside?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <div className="trust-page">
-      <header data-page-hero className="trust-hero">
-        {eyebrow ? <p className="trust-eyebrow">{eyebrow}</p> : null}
-        <h1>{title}</h1>
-        <div className="trust-lede">{description}</div>
-        {actions ? <div className="trust-actions">{actions}</div> : null}
-        {aside}
-      </header>
+      <PageHero eyebrow={eyebrow} title={title} description={description}>
+        {actions}
+      </PageHero>
+      {aside}
       <article>{children}</article>
     </div>
   );
@@ -43,7 +41,7 @@ export function TrustSection({
 }) {
   return (
     <section data-content-section id={id} className="trust-section">
-      <h2>{title}</h2>
+      <h2 className="section-title">{title}</h2>
       {description ? <p className="trust-section-intro">{description}</p> : null}
       {children}
     </section>
@@ -65,14 +63,14 @@ export function TrustCta({
 }) {
   return (
     <div className="trust-cta">
-      <h2>{title}</h2>
+      <h2 className="section-title">{title}</h2>
       <div className="trust-cta-links">
         {primaryHref && primaryLabel ? (
-          <Link href={primaryHref} className="trust-button">
+          <Link href={primaryHref} className="text-[17px] font-semibold text-foreground">
             {primaryLabel}
           </Link>
         ) : null}
-        <Link href={secondaryHref} className="trust-text-link">
+        <Link href={secondaryHref} className="text-[17px] font-medium text-muted">
           {secondaryLabel}
         </Link>
       </div>
